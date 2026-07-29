@@ -19,7 +19,16 @@ function resolveSiteUrl(): string {
 export const SITE = {
   name: 'BedRock IT',
   url: resolveSiteUrl(),
+  /**
+   * Preview image path, or '' when none is present. The build sets this only
+   * after finding the file, so a missing image means no og:image tag rather
+   * than a broken thumbnail on Messenger.
+   */
+  ogImage: import.meta.env.VITE_OG_IMAGE || '',
 }
+
+const OG_IMAGE_ALT =
+  'A person working on a laptop on a sunlit hillside, under a dark cinematic sky.'
 
 import { SERVICES } from '../data/services'
 
@@ -109,10 +118,20 @@ export function renderHeadTags(seo: RouteSeo, basePrefix = '/'): string {
     `<meta property="og:title" content="${escapeAttr(seo.title)}" />`,
     `<meta property="og:description" content="${escapeAttr(seo.description)}" />`,
     `<meta property="og:url" content="${escapeAttr(canonical)}" />`,
-    `<meta name="twitter:card" content="summary_large_image" />`,
+    `<meta name="twitter:card" content="${SITE.ogImage ? 'summary_large_image' : 'summary'}" />`,
     `<meta name="twitter:title" content="${escapeAttr(seo.title)}" />`,
     `<meta name="twitter:description" content="${escapeAttr(seo.description)}" />`,
   ]
+
+  if (SITE.ogImage) {
+    const imageUrl = `${SITE.url}${basePrefix.replace(/\/$/, '')}${SITE.ogImage}`
+    tags.push(
+      `<meta property="og:image" content="${escapeAttr(imageUrl)}" />`,
+      `<meta property="og:image:alt" content="${escapeAttr(OG_IMAGE_ALT)}" />`,
+      `<meta name="twitter:image" content="${escapeAttr(imageUrl)}" />`,
+    )
+  }
+
   if (seo.noindex) tags.push(`<meta name="robots" content="noindex" />`)
   return tags.join('\n    ')
 }

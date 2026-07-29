@@ -43,9 +43,18 @@ export default function Seo() {
     upsertMeta('property', 'og:title', seo.title)
     upsertMeta('property', 'og:description', seo.description)
     upsertMeta('property', 'og:url', canonical)
-    upsertMeta('name', 'twitter:card', 'summary_large_image')
+    upsertMeta('name', 'twitter:card', SITE.ogImage ? 'summary_large_image' : 'summary')
     upsertMeta('name', 'twitter:title', seo.title)
     upsertMeta('name', 'twitter:description', seo.description)
+
+    if (SITE.ogImage) {
+      const imageUrl = `${window.location.origin}${import.meta.env.BASE_URL.replace(
+        /\/$/,
+        '',
+      )}${SITE.ogImage}`
+      upsertMeta('property', 'og:image', imageUrl)
+      upsertMeta('name', 'twitter:image', imageUrl)
+    }
 
     const robots = document.head.querySelector('meta[name="robots"]')
     if (seo.noindex) {

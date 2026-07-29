@@ -48,6 +48,31 @@ function resolveOrigin() {
 
 const { origin, from: originFrom } = resolveOrigin()
 
+/**
+ * Link-preview image. Scrapers cannot render SVG and will not follow a 404, so
+ * the tag is only emitted once a real raster file is in place.
+ */
+function resolveOgImage() {
+  for (const name of ['og-image.jpg', 'og-image.jpeg', 'og-image.png', 'og-image.webp']) {
+    if (existsSync(resolve('public', name))) return `/${name}`
+  }
+  return ''
+}
+
+const ogImage = resolveOgImage()
+
+if (!ogImage) {
+  console.warn(
+    '\nNo public/og-image.{jpg,jpeg,png} found — building without og:image.\n' +
+      'Link previews will show text with no thumbnail. Ideal size is 1200x630.\n',
+  )
+} else if (ogImage.endsWith('.webp')) {
+  console.warn(
+    `\nUsing ${ogImage}, but several scrapers do not decode WebP.\n` +
+      'A JPEG or PNG is safer for link previews.\n',
+  )
+}
+
 if (base !== '/' && originFrom === 'local fallback') {
   console.warn(
     `\nWarning: building for subpath "${base}" with no origin available.\n` +
@@ -56,8 +81,13 @@ if (base !== '/' && originFrom === 'local fallback') {
   )
 }
 
-// VITE_ prefix so the value is inlined into both the client and SSR bundles.
-const env = { ...process.env, BASE_PATH: base, VITE_SITE_URL: origin }
+// VITE_ prefix so the values are inlined into both the client and SSR bundles.
+const env = {
+  ...process.env,
+  BASE_PATH: base,
+  VITE_SITE_URL: origin,
+  VITE_OG_IMAGE: ogImage,
+}
 
 // Call Vite's JS entry with the running node binary rather than the shell
 // wrapper — Node refuses to spawn .cmd files without a shell on Windows.
@@ -65,7 +95,10 @@ const viteBin = resolve('node_modules', 'vite', 'bin', 'vite.js')
 const run = (cmdArgs) =>
   execFileSync(process.execPath, [viteBin, ...cmdArgs], { stdio: 'inherit', env })
 
-console.log(`\nBuilding with base "${base}" and origin ${origin} (from ${originFrom})`)
+console.log(
+  `\nBuilding with base "${base}", origin ${origin} (from ${originFrom})` +
+    `, og:image ${ogImage || 'none'}`,
+)
 run(['build'])
 run(['build', '--ssr', 'src/entry-server.tsx', '--outDir', SSR_OUT])
 

@@ -126,8 +126,13 @@ base the build used. For a custom domain on Pages, build with `--base=/` instead
   process, deliberately avoiding claims that would need proof (certifications, partner
   status, client names, prices). Check every sentence is something you would stand behind
   on a call, and add the specifics only you know.
-- **No `og:image`.** Link previews on Messenger, WhatsApp and LinkedIn will show text with
-  no thumbnail. Add a 1200×630 image to `public/` and reference it in `renderHeadTags`.
+- **No `og:image` yet.** Save a preview image as `public/og-image.jpg` (or `.png`) and the
+  build wires it up on its own — `og:image`, `og:image:alt`, `twitter:image`, and
+  `twitter:card` switches from `summary` to `summary_large_image`. Until the file exists no
+  image tag is emitted at all, so previews degrade to text rather than a broken thumbnail.
+  Use 1200×630; a portrait or square image renders as a small side thumbnail on Messenger
+  instead of a full-width card. Update `OG_IMAGE_ALT` in `src/config/seo.ts` if the picture
+  changes.
 - **Media is placeholder.** The hero and feature-card videos are stock; swap `HERO_VIDEO`
   in `src/components/Hero.tsx` and `CARD_VIDEO` in `src/components/Features.tsx`.
 
