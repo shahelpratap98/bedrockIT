@@ -11,6 +11,8 @@ export const SITE = {
   url: (import.meta.env.VITE_SITE_URL || 'https://bedrockit.co.nz').replace(/\/$/, ''),
 }
 
+import { SERVICES } from '../data/services'
+
 export interface RouteSeo {
   path: string
   title: string
@@ -18,6 +20,13 @@ export interface RouteSeo {
   /** Keep out of search results (used for the 404 shell). */
   noindex?: boolean
 }
+
+/** Spoke pages, derived so page copy and metadata cannot drift apart. */
+const SERVICE_SEO: RouteSeo[] = SERVICES.map((service) => ({
+  path: `/services/${service.slug}`,
+  title: service.seoTitle,
+  description: service.seoDescription,
+}))
 
 export const ROUTE_SEO: RouteSeo[] = [
   {
@@ -36,19 +45,14 @@ export const ROUTE_SEO: RouteSeo[] = [
     path: '/services',
     title: 'IT Services — BedRock IT',
     description:
-      'Managed IT support, cloud and migration, cyber security, networks, website development and project rollouts — scoped and priced before any work begins.',
+      'Managed IT support, cloud migration, cyber security, website development, networks and project rollouts — scoped and priced before any work begins.',
   },
+  ...SERVICE_SEO,
   {
     path: '/support',
-    title: 'IT Support and Response Times — BedRock IT',
+    title: 'Get IT Support — BedRock IT',
     description:
-      'Phone, WhatsApp and email support staffed by engineers who already know your setup, with P1 to P4 response targets written into the agreement.',
-  },
-  {
-    path: '/cloud',
-    title: 'Cloud Migration — BedRock IT',
-    description:
-      'Microsoft 365 and Azure migrations run in stages with a tested rollback at every step, so moving to the cloud does not cost you a working day.',
+      'How existing clients reach the BedRock IT helpdesk by phone, WhatsApp or email, what counts as a P1, and the response targets we report against monthly.',
   },
   {
     path: '/contact',

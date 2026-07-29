@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { NAV_ITEMS } from './Navbar'
 import BookCallButton from './BookCallButton'
 import { CONTACT, EMAIL_HREF, WHATSAPP_URL } from '../config/contact'
+import { SERVICES } from '../data/services'
 
 export default function Footer() {
   return (
@@ -24,7 +25,7 @@ export default function Footer() {
         </div>
 
         {/* Footer columns */}
-        <div className="mt-14 grid grid-cols-1 gap-10 border-t border-white/10 pt-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-14 grid grid-cols-1 gap-10 border-t border-white/10 pt-10 sm:grid-cols-2 lg:grid-cols-5">
           <div>
             <Link to="/" className="text-base font-bold" style={{ color: '#E1E0CC' }}>
               BedRock IT
@@ -44,6 +45,22 @@ export default function Footer() {
                     className="text-xs text-gray-400 transition-colors hover:text-primary"
                   >
                     {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-primary">Services</p>
+            <ul className="mt-4 flex flex-col gap-2">
+              {SERVICES.map((service) => (
+                <li key={service.slug}>
+                  <Link
+                    to={`/services/${service.slug}`}
+                    className="text-xs text-gray-400 transition-colors hover:text-primary"
+                  >
+                    {service.name}
                   </Link>
                 </li>
               ))}

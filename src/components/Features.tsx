@@ -21,7 +21,7 @@ const CARDS: FeatureCard[] = [
     number: '01',
     title: 'Website Development.',
     Icon: Globe,
-    to: '/services',
+    to: '/services/website-development',
     items: [
       'SEO optimised sites built to rank, not just to look good.',
       'Monthly reporting on traffic, rankings and enquiries.',
@@ -33,7 +33,7 @@ const CARDS: FeatureCard[] = [
     number: '02',
     title: 'Cloud & Migration.',
     Icon: CloudCog,
-    to: '/cloud',
+    to: '/services/cloud-migration',
     items: [
       'Microsoft 365 and Azure set up the way it should be.',
       'Server and file migrations planned around your hours.',
@@ -44,7 +44,7 @@ const CARDS: FeatureCard[] = [
     number: '03',
     title: 'Cyber Security.',
     Icon: ShieldCheck,
-    to: '/services',
+    to: '/services/cyber-security',
     items: [
       'Multi-factor and endpoint protection across every device.',
       'Phishing simulations and training for your staff.',

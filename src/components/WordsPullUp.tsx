@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { Fragment, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 interface WordsPullUpProps {
@@ -36,34 +36,38 @@ export default function WordsPullUp({
   const isInView = useInView(ref, { once: true })
   const Tag = as as React.ElementType
 
+  // Normal inline flow with real spaces between words, rather than flex items
+  // with padding — otherwise the heading's text content reads as one long word.
   return (
-    <Tag ref={ref} className={`flex flex-wrap ${className}`} style={style}>
+    <Tag ref={ref} className={className} style={style}>
       {words.map((word, i) => {
         const isLast = i === words.length - 1
         const head = word.slice(0, -1)
         const tail = word.slice(-1)
 
         return (
-          <motion.span
-            key={`${word}-${i}`}
-            custom={i}
-            variants={pullUpVariant}
-            initial="initial"
-            animate={isInView ? 'animate' : 'initial'}
-            className="inline-block pr-[0.25em]"
-          >
-            {showAsterisk && isLast ? (
-              <>
-                {head}
-                <span className="relative inline-block">
-                  {tail}
-                  <span className="absolute top-[0.65em] -right-[0.3em] text-[0.31em]">*</span>
-                </span>
-              </>
-            ) : (
-              word
-            )}
-          </motion.span>
+          <Fragment key={`${word}-${i}`}>
+            {i > 0 && ' '}
+            <motion.span
+              custom={i}
+              variants={pullUpVariant}
+              initial="initial"
+              animate={isInView ? 'animate' : 'initial'}
+              className="inline-block"
+            >
+              {showAsterisk && isLast ? (
+                <>
+                  {head}
+                  <span className="relative inline-block">
+                    {tail}
+                    <span className="absolute top-[0.65em] -right-[0.3em] text-[0.31em]">*</span>
+                  </span>
+                </>
+              ) : (
+                word
+              )}
+            </motion.span>
+          </Fragment>
         )
       })}
     </Tag>

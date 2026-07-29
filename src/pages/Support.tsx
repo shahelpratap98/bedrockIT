@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Check } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
@@ -10,14 +10,14 @@ const CHANNELS = [
     title: 'Phone',
     detail: CONTACT.phoneDisplay,
     href: CONTACT.phoneHref,
-    body: 'A person, not a menu tree. Best for anything stopping you working right now.',
+    body: 'Fastest route for anything stopping you working right now. A person, not a menu tree.',
   },
   {
     title: 'WhatsApp',
     detail: CONTACT.phoneDisplay,
     href: WHATSAPP_URL,
     external: true,
-    body: 'Send a photo of the error and we can often diagnose it before we call you back.',
+    body: 'Send a photo of the error message. We can often diagnose it before calling you back.',
   },
   {
     title: 'Email',
@@ -34,11 +34,23 @@ const SLA = [
   { priority: 'P4', label: 'Request or change', response: '1 business day', target: 'By agreement' },
 ]
 
-const INCLUDED = [
-  'Unlimited helpdesk contacts — no per-ticket charging',
-  'Remote and on-site attendance where it is needed',
-  'Monitoring that raises tickets before your team notices',
-  'Monthly reporting on volume, causes and repeat faults',
+const FASTER = [
+  {
+    title: 'Tell us who and how many',
+    body: 'One person or the whole office changes the priority, and therefore who picks it up.',
+  },
+  {
+    title: 'Send the exact error',
+    body: 'A photo or screenshot of the message beats a description of it almost every time.',
+  },
+  {
+    title: 'Say what changed',
+    body: 'New software, a moved cable, a password reset yesterday. The trigger is usually recent.',
+  },
+  {
+    title: 'Flag a deadline',
+    body: 'If payroll runs at four, say so. We sequence work around real deadlines when we know them.',
+  },
 ]
 
 export default function Support() {
@@ -49,13 +61,13 @@ export default function Support() {
       <PageHeader
         label="Support"
         segments={[
-          { text: 'When something breaks,', className: 'font-normal' },
-          { text: 'you get a person.', className: 'italic font-serif' },
+          { text: 'Something broken?', className: 'font-normal' },
+          { text: 'Here is how to reach us.', className: 'italic font-serif' },
         ]}
-        intro="Our helpdesk is staffed by engineers who already know your setup. No scripts read aloud, no escalation queue to climb before someone competent picks up."
+        intro="For clients on a support agreement. Pick whichever channel suits the urgency — all three reach engineers who already know your environment."
       />
 
-      {/* Channels */}
+      {/* How to reach us */}
       <section className="px-4 pb-20 sm:px-6 md:pb-24">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-3 md:grid-cols-3 md:gap-1">
           {CHANNELS.map((channel, i) => (
@@ -66,9 +78,7 @@ export default function Support() {
                 </p>
                 <a
                   href={channel.href}
-                  {...(channel.external
-                    ? { target: '_blank', rel: 'noopener noreferrer' }
-                    : {})}
+                  {...(channel.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   className="mt-4 block break-words text-base transition-colors hover:text-primary sm:text-lg"
                   style={{ color: '#E1E0CC' }}
                 >
@@ -126,34 +136,39 @@ export default function Support() {
         </div>
       </section>
 
-      {/* What is included */}
+      {/* Helping us help you */}
       <section className="px-4 pb-20 sm:px-6 md:pb-28">
-        <div className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-10 md:grid-cols-2">
-          <div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl" style={{ color: '#E1E0CC' }}>
-              What the agreement covers
-            </h2>
-            <p className="mt-4 max-w-md text-xs leading-relaxed text-gray-400 sm:text-sm">
-              One monthly fee, scoped to your headcount and systems. No surprise invoices for a bad
-              month — a bad month is precisely when you should be calling us.
-            </p>
-            <Link
-              to="/contact"
-              className="group mt-8 inline-flex items-center gap-1.5 text-xs text-primary transition-colors hover:text-primary/70"
-            >
-              Get a scoped quote
-              <ArrowRight className="h-3.5 w-3.5 -rotate-45 transition-transform duration-300 group-hover:translate-x-0.5" />
-            </Link>
+        <div className="mx-auto max-w-7xl">
+          <h2 className="text-center text-xl sm:text-2xl md:text-3xl" style={{ color: '#E1E0CC' }}>
+            Getting a faster fix
+          </h2>
+          <p className="mx-auto mt-4 max-w-lg text-center text-xs text-gray-400 sm:text-sm">
+            None of this is required. It just tends to remove a round trip.
+          </p>
+
+          <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 md:gap-1 lg:grid-cols-4">
+            {FASTER.map((tip, i) => (
+              <Reveal key={tip.title} index={i} className="h-full">
+                <div className="h-full rounded-2xl bg-[#212121] p-6">
+                  <h3 className="text-base" style={{ color: '#E1E0CC' }}>
+                    {tip.title}
+                  </h3>
+                  <p className="mt-3 text-xs leading-relaxed text-gray-400">{tip.body}</p>
+                </div>
+              </Reveal>
+            ))}
           </div>
 
-          <ul className="flex flex-col gap-4">
-            {INCLUDED.map((item) => (
-              <li key={item} className="flex items-start gap-2">
-                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                <span className="text-xs leading-snug text-gray-400 sm:text-sm">{item}</span>
-              </li>
-            ))}
-          </ul>
+          <p className="mt-12 text-center text-xs text-gray-400 sm:text-sm">
+            Not a client yet?{' '}
+            <Link
+              to="/services/managed-it-support"
+              className="inline-flex items-center gap-1 text-primary transition-colors hover:text-primary/70"
+            >
+              See what managed support covers
+              <ArrowRight className="h-3 w-3 -rotate-45" />
+            </Link>
+          </p>
         </div>
       </section>
     </div>

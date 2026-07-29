@@ -1,67 +1,22 @@
-import {
-  Check,
-  CloudCog,
-  Globe,
-  Headset,
-  Network,
-  ShieldCheck,
-  Wrench,
-  type LucideIcon,
-} from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, Check, CloudCog, Globe, Headset, Network, ShieldCheck, Wrench } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
+import { SERVICES } from '../data/services'
 
-interface Service {
-  number: string
-  title: string
-  Icon: LucideIcon
-  body: string
-  items: string[]
+const ICONS: Record<string, typeof Globe> = {
+  'website-development': Globe,
+  'managed-it-support': Headset,
+  'cyber-security': ShieldCheck,
+  'cloud-migration': CloudCog,
 }
 
-const SERVICES: Service[] = [
+/** Services without enough depth for their own page live here. */
+const ALSO = [
   {
-    number: '01',
-    title: 'Managed IT support',
-    Icon: Headset,
-    body: 'A full IT department on a fixed monthly fee, with response times written into the agreement.',
-    items: [
-      'Unlimited helpdesk for your whole team',
-      'Named engineer who knows your environment',
-      '24/7 monitoring and alerting',
-      'Asset register kept current, not annually',
-    ],
-  },
-  {
-    number: '02',
-    title: 'Cloud and migration',
-    Icon: CloudCog,
-    body: 'Microsoft 365 and Azure set up properly the first time, and migrations planned around your trading hours.',
-    items: [
-      'Tenant design, licensing review and clean-up',
-      'File server to SharePoint migrations',
-      'Backup and recovery that gets tested',
-      'Cost review so you stop paying for unused seats',
-    ],
-  },
-  {
-    number: '03',
-    title: 'Cyber security',
-    Icon: ShieldCheck,
-    body: 'Practical controls that match the threats a business your size actually faces.',
-    items: [
-      'Multi-factor authentication across every service',
-      'Endpoint protection and device encryption',
-      'Phishing simulation and staff training',
-      'Patching on an auditable schedule',
-    ],
-  },
-  {
-    number: '04',
     title: 'Networks and connectivity',
     Icon: Network,
-    body: 'Wired, wireless and remote access designed to hold up on your busiest day, not your quietest.',
     items: [
       'Site surveys and Wi-Fi design',
       'Firewall configuration and review',
@@ -70,22 +25,8 @@ const SERVICES: Service[] = [
     ],
   },
   {
-    number: '05',
-    title: 'Website development',
-    Icon: Globe,
-    body: 'Sites built to be found and to stay up — designed, hosted and reported on by the same team that runs your IT.',
-    items: [
-      'SEO optimised website built to rank, not just to look good',
-      'Monthly reporting on traffic, rankings and enquiries',
-      'DNS management — records, email routing and certificates',
-      'Hosting with backups, monitoring and uptime included',
-    ],
-  },
-  {
-    number: '06',
     title: 'Projects and rollouts',
     Icon: Wrench,
-    body: 'Office moves, hardware refreshes and system replacements, scoped with a fixed price before we start.',
     items: [
       'Office relocations planned to the hour',
       'Device procurement and staged builds',
@@ -109,35 +50,71 @@ export default function Services() {
         intro="Most clients take the lot. Some start with one piece and add the rest once they trust us. Either way, the scope is written down and the price is fixed before any work begins."
       />
 
-      <section className="px-4 pb-20 sm:px-6 md:pb-28">
+      {/* The four main services, each with its own page */}
+      <section className="px-4 pb-20 sm:px-6 md:pb-24">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-3 md:grid-cols-2 md:gap-1">
-          {SERVICES.map((service, i) => (
-            <Reveal key={service.number} index={i % 2} className="h-full">
-              <div className="flex h-full flex-col rounded-2xl bg-[#212121] p-6 sm:p-8">
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-white/[0.09] to-white/[0.02] ring-1 ring-white/10 sm:h-12 sm:w-12">
-                  <service.Icon className="h-5 w-5 text-primary sm:h-6 sm:w-6" strokeWidth={1.5} />
-                </span>
+          {SERVICES.map((service, i) => {
+            const Icon = ICONS[service.slug] ?? Globe
+            return (
+              <Reveal key={service.slug} index={i % 2} className="h-full">
+                <Link
+                  to={`/services/${service.slug}`}
+                  className="group flex h-full flex-col rounded-2xl bg-[#212121] p-6 transition-colors hover:bg-[#262626] sm:p-8"
+                >
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-white/[0.09] to-white/[0.02] ring-1 ring-white/10 sm:h-12 sm:w-12">
+                    <Icon className="h-5 w-5 text-primary sm:h-6 sm:w-6" strokeWidth={1.5} />
+                  </span>
 
-                <h3 className="mt-5 text-lg sm:text-xl" style={{ color: '#E1E0CC' }}>
-                  {service.title}{' '}
-                  <span className="align-super text-[10px] text-primary/70">{service.number}</span>
-                </h3>
+                  <h2 className="mt-5 text-lg sm:text-xl" style={{ color: '#E1E0CC' }}>
+                    {service.name}
+                  </h2>
 
-                <p className="mt-3 text-xs leading-relaxed text-gray-400 sm:text-sm">
-                  {service.body}
-                </p>
+                  <p className="mt-3 text-xs leading-relaxed text-gray-400 sm:text-sm">
+                    {service.intro}
+                  </p>
 
-                <ul className="mt-6 flex flex-col gap-3">
-                  {service.items.map((item) => (
-                    <li key={item} className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                      <span className="text-xs leading-snug text-gray-400">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
-          ))}
+                  <span className="mt-auto flex items-center gap-1.5 pt-8 text-xs text-primary">
+                    Learn more
+                    <ArrowRight className="h-3.5 w-3.5 -rotate-45 transition-transform duration-300 group-hover:translate-x-0.5" />
+                  </span>
+                </Link>
+              </Reveal>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* Everything else, kept here rather than split into thin pages */}
+      <section className="px-4 pb-20 sm:px-6 md:pb-28">
+        <div className="mx-auto max-w-7xl">
+          <h2 className="text-center text-xl sm:text-2xl md:text-3xl" style={{ color: '#E1E0CC' }}>
+            Also part of the job
+          </h2>
+
+          <div className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-1">
+            {ALSO.map((item, i) => (
+              <Reveal key={item.title} index={i} className="h-full">
+                <div className="flex h-full flex-col rounded-2xl bg-[#212121] p-6 sm:p-8">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-white/[0.09] to-white/[0.02] ring-1 ring-white/10 sm:h-12 sm:w-12">
+                    <item.Icon className="h-5 w-5 text-primary sm:h-6 sm:w-6" strokeWidth={1.5} />
+                  </span>
+
+                  <h3 className="mt-5 text-lg sm:text-xl" style={{ color: '#E1E0CC' }}>
+                    {item.title}
+                  </h3>
+
+                  <ul className="mt-5 flex flex-col gap-3">
+                    {item.items.map((line) => (
+                      <li key={line} className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                        <span className="text-xs leading-snug text-gray-400">{line}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
     </div>

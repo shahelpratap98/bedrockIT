@@ -26,14 +26,29 @@ npm run build
 
 ## Pages
 
+Hub and spoke: `/services` introduces each service and links to a page per service, so
+each one can target its own search intent with its own title and description. Services
+without enough depth to sustain a page (networks, project rollouts) stay on the hub —
+thin pages are worse than no pages.
+
 | Route | Contents |
 | --- | --- |
 | `/` | Hero, About, and a four-card feature grid |
 | `/our-story` | Company timeline and working principles |
-| `/services` | Six services with detail and checklists |
-| `/support` | Contact channels, response targets, agreement scope |
-| `/cloud` | Five-phase migration process |
+| `/services` | Hub — links to the four service pages, plus networks and rollouts |
+| `/services/website-development` | Includes, process, outcomes, FAQs |
+| `/services/managed-it-support` | Includes, outcomes, FAQs |
+| `/services/cyber-security` | Includes, outcomes, FAQs |
+| `/services/cloud-migration` | Includes, five-phase process, outcomes, FAQs |
+| `/support` | For existing clients — how to reach the helpdesk, response targets |
 | `/contact` | Contact details and enquiry form |
+
+`/cloud` 301s to `/services/cloud-migration` (via `vercel.json`, with a client-side
+fallback in `AppRoutes.tsx` for hosts that ignore it).
+
+Service copy lives in `src/data/services.ts` — one entry per spoke drives the page, the
+hub card, the sibling links, the footer, the route and its metadata. Each spoke emits
+`FAQPage` structured data from its own questions.
 
 ## Search and social metadata
 
@@ -94,6 +109,10 @@ base the build used. For a custom domain on Pages, build with `--base=/` instead
   a form endpoint instead.
 - **Response targets are placeholders.** The P1–P4 figures in `src/pages/Support.tsx` read
   as contractual commitments — replace them with the real numbers.
+- **Service copy needs your review.** `src/data/services.ts` describes capability and
+  process, deliberately avoiding claims that would need proof (certifications, partner
+  status, client names, prices). Check every sentence is something you would stand behind
+  on a call, and add the specifics only you know.
 - **`SITE.url` in `src/config/seo.ts` defaults to a placeholder domain.** Set `SITE_URL` at
   build time, or link previews and canonical URLs will point somewhere that does not exist.
 - **Media is placeholder.** The hero and feature-card videos are stock; swap `HERO_VIDEO`

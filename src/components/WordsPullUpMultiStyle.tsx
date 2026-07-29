@@ -49,24 +49,25 @@ export default function WordsPullUpMultiStyle({
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true })
 
+  // Real spaces between words in normal inline flow — with flex items and
+  // padding the heading's text content would read as one unbroken word.
   return (
     <Tag ref={ref} className={className} style={style}>
-      <span className="inline-flex flex-wrap justify-center">
-        {words.map(({ word, className: wordClassName, breakAfter }, i) => (
-          <Fragment key={`${word}-${i}`}>
-            <motion.span
-              custom={i}
-              variants={pullUpVariant}
-              initial="initial"
-              animate={isInView ? 'animate' : 'initial'}
-              className={`inline-block pr-[0.25em] ${wordClassName}`}
-            >
-              {word}
-            </motion.span>
-            {breakAfter && <span className="h-0 basis-full" />}
-          </Fragment>
-        ))}
-      </span>
+      {words.map(({ word, className: wordClassName, breakAfter }, i) => (
+        <Fragment key={`${word}-${i}`}>
+          {i > 0 && ' '}
+          <motion.span
+            custom={i}
+            variants={pullUpVariant}
+            initial="initial"
+            animate={isInView ? 'animate' : 'initial'}
+            className={`inline-block ${wordClassName}`}
+          >
+            {word}
+          </motion.span>
+          {breakAfter && <br />}
+        </Fragment>
+      ))}
     </Tag>
   )
 }

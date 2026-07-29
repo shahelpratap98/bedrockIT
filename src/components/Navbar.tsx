@@ -4,7 +4,7 @@ export const NAV_ITEMS = [
   { label: 'Our story', to: '/our-story' },
   { label: 'Services', to: '/services' },
   { label: 'Support', to: '/support' },
-  { label: 'Cloud', to: '/cloud' },
+  { label: 'Cloud', to: '/services/cloud-migration' },
   { label: 'Contact', to: '/contact' },
 ]
 
