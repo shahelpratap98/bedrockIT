@@ -69,8 +69,10 @@ export default function Features() {
   const isInView = useInView(gridRef, { once: true, margin: '-100px' })
 
   return (
-    <section className="relative flex min-h-screen items-center bg-black px-4 py-20 sm:px-6 md:py-28">
-      <div className="bg-noise pointer-events-none absolute inset-0 opacity-[0.15]" />
+    <section className="relative bg-black px-4 py-20 sm:px-6 md:py-28">
+      {/* Faded at both edges so the grain does not butt up against the pure
+          black of the next section as a visible seam. */}
+      <div className="bg-noise pointer-events-none absolute inset-0 opacity-[0.12] [mask-image:linear-gradient(to_bottom,transparent,black_12%,black_88%,transparent)]" />
 
       <div className="relative mx-auto w-full max-w-7xl">
         <WordsPullUpMultiStyle
