@@ -61,11 +61,24 @@ its own HTML file, and React hydrates over that markup on load. `src/components/
 keeps the head in step during client-side navigation. Both read the same data from
 `src/config/seo.ts`, so the static tags and the post-hydration tags cannot drift.
 
-Set the live origin at build time — Open Graph needs absolute URLs:
+Open Graph needs absolute URLs, and the origin is never hardcoded. The build resolves it
+in this order:
+
+1. `SITE_URL` — explicit override
+2. Vercel's production domain (`VERCEL_PROJECT_PRODUCTION_URL`) on production builds — this
+   becomes your custom domain automatically the moment you attach one in Vercel, with no
+   code change
+3. The deployment's own URL (`VERCEL_URL`) — so preview deploys reference themselves
+4. `http://localhost:4173` for local builds
+
+The build prints which one it used. Override it for a host that supplies no environment:
 
 ```bash
 SITE_URL=https://your-domain.co.nz npm run build
 ```
+
+On the client, `Seo.tsx` uses `window.location.origin`, so canonical URLs follow whichever
+domain a visitor is actually on.
 
 The build also writes `sitemap.xml` and `robots.txt` from the same route list.
 
@@ -113,8 +126,8 @@ base the build used. For a custom domain on Pages, build with `--base=/` instead
   process, deliberately avoiding claims that would need proof (certifications, partner
   status, client names, prices). Check every sentence is something you would stand behind
   on a call, and add the specifics only you know.
-- **`SITE.url` in `src/config/seo.ts` defaults to a placeholder domain.** Set `SITE_URL` at
-  build time, or link previews and canonical URLs will point somewhere that does not exist.
+- **No `og:image`.** Link previews on Messenger, WhatsApp and LinkedIn will show text with
+  no thumbnail. Add a 1200×630 image to `public/` and reference it in `renderHeadTags`.
 - **Media is placeholder.** The hero and feature-card videos are stock; swap `HERO_VIDEO`
   in `src/components/Hero.tsx` and `CARD_VIDEO` in `src/components/Features.tsx`.
 

@@ -21,12 +21,37 @@ const base = baseArg ? baseArg.slice('--base='.length) : '/'
 const wantFallback = args.includes('--fallback')
 
 const SSR_OUT = 'dist-ssr'
-const origin = (process.env.SITE_URL ?? 'https://bedrockit.co.nz').replace(/\/$/, '')
 
-if (base !== '/' && !process.env.SITE_URL) {
+/**
+ * Absolute origin for canonical, Open Graph and sitemap URLs. Link previews on
+ * Messenger, WhatsApp and LinkedIn read these from the static HTML, so they must
+ * point at a domain that is actually live — never a hardcoded guess.
+ *
+ *   1. SITE_URL              — explicit override, wins over everything
+ *   2. production domain     — Vercel's own; becomes your custom domain the
+ *                              moment you attach one, with no code change
+ *   3. this deployment's URL — so preview deploys reference themselves
+ *   4. localhost             — local builds only
+ */
+function resolveOrigin() {
+  const { SITE_URL, VERCEL_ENV, VERCEL_PROJECT_PRODUCTION_URL, VERCEL_URL } = process.env
+  if (SITE_URL) return { origin: SITE_URL.replace(/\/$/, ''), from: 'SITE_URL' }
+  if (VERCEL_ENV === 'production' && VERCEL_PROJECT_PRODUCTION_URL) {
+    return {
+      origin: `https://${VERCEL_PROJECT_PRODUCTION_URL}`,
+      from: 'VERCEL_PROJECT_PRODUCTION_URL',
+    }
+  }
+  if (VERCEL_URL) return { origin: `https://${VERCEL_URL}`, from: 'VERCEL_URL' }
+  return { origin: 'http://localhost:4173', from: 'local fallback' }
+}
+
+const { origin, from: originFrom } = resolveOrigin()
+
+if (base !== '/' && originFrom === 'local fallback') {
   console.warn(
-    `\nWarning: building for subpath "${base}" with the default origin ${origin}.\n` +
-      `Canonical URLs and the sitemap will be wrong. Set SITE_URL, e.g.\n` +
+    `\nWarning: building for subpath "${base}" with no origin available.\n` +
+      `Canonical URLs and the sitemap will point at localhost. Set SITE_URL, e.g.\n` +
       `  SITE_URL=https://shahelpratap98.github.io npm run build:pages\n`,
   )
 }
@@ -40,7 +65,7 @@ const viteBin = resolve('node_modules', 'vite', 'bin', 'vite.js')
 const run = (cmdArgs) =>
   execFileSync(process.execPath, [viteBin, ...cmdArgs], { stdio: 'inherit', env })
 
-console.log(`\nBuilding with base "${base}"`)
+console.log(`\nBuilding with base "${base}" and origin ${origin} (from ${originFrom})`)
 run(['build'])
 run(['build', '--ssr', 'src/entry-server.tsx', '--outDir', SSR_OUT])
 

@@ -31,7 +31,9 @@ export default function Seo() {
 
   useEffect(() => {
     const seo = seoFor(pathname)
-    const canonical = canonicalFor(seo, import.meta.env.BASE_URL)
+    // Prefer the origin actually being viewed, so the same build serves
+    // correct URLs from a preview domain and a custom domain alike.
+    const canonical = canonicalFor(seo, import.meta.env.BASE_URL, window.location.origin)
 
     document.title = seo.title
     upsertMeta('name', 'description', seo.description)

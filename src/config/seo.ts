@@ -3,12 +3,22 @@
  * script, so the tags in the static HTML and the tags after hydration agree.
  */
 
-// TODO: set this to the live domain before launch — Open Graph needs absolute
-// URLs, and link previews break if it is wrong. Override at build time with
-// SITE_URL=https://your-domain npm run build
+/**
+ * Origin used for absolute URLs. Never hardcoded to a domain: the build script
+ * resolves it from SITE_URL, then Vercel's own environment, so the tags always
+ * point at whatever is actually live. In `vite dev` there is no build-time
+ * value, so fall back to the origin being viewed.
+ */
+function resolveSiteUrl(): string {
+  const fromBuild = import.meta.env.VITE_SITE_URL
+  if (fromBuild) return fromBuild.replace(/\/$/, '')
+  if (typeof window !== 'undefined') return window.location.origin
+  return ''
+}
+
 export const SITE = {
   name: 'BedRock IT',
-  url: (import.meta.env.VITE_SITE_URL || 'https://bedrockit.co.nz').replace(/\/$/, ''),
+  url: resolveSiteUrl(),
 }
 
 import { SERVICES } from '../data/services'
@@ -82,9 +92,9 @@ function escapeAttr(value: string) {
  * Absolute URL for a route. `basePrefix` is the deploy subpath — "/" for a
  * domain root, "/bedrockIT/" for a GitHub Pages project site.
  */
-export function canonicalFor(seo: RouteSeo, basePrefix = '/'): string {
+export function canonicalFor(seo: RouteSeo, basePrefix = '/', origin = SITE.url): string {
   const prefix = basePrefix.replace(/\/$/, '')
-  return `${SITE.url}${prefix}${seo.path === '/' ? '/' : seo.path}`
+  return `${origin}${prefix}${seo.path === '/' ? '/' : seo.path}`
 }
 
 /** Head tags as an HTML string, for the prerendered pages. */
