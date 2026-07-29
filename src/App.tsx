@@ -16,8 +16,9 @@ function ScrollToTop() {
 }
 
 export default function App() {
+  // BASE_URL is "/" unless a subpath build set it (see build:pages).
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ScrollToTop />
       <main className="bg-black">
         <Routes>
