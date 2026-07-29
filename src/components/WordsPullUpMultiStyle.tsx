@@ -12,6 +12,8 @@ interface WordsPullUpMultiStyleProps {
   segments: TextSegment[]
   className?: string
   style?: React.CSSProperties
+  /** Element to render, so headings can be semantic. */
+  as?: 'div' | 'h1' | 'h2'
 }
 
 const pullUpVariant = {
@@ -31,7 +33,9 @@ export default function WordsPullUpMultiStyle({
   segments,
   className = '',
   style,
+  as = 'div',
 }: WordsPullUpMultiStyleProps) {
+  const Tag = as as React.ElementType
   // Flatten every segment into words while keeping each word's own styling.
   const words = segments.flatMap((segment) => {
     const segmentWords = segment.text.split(' ').filter(Boolean)
@@ -46,7 +50,7 @@ export default function WordsPullUpMultiStyle({
   const isInView = useInView(ref, { once: true })
 
   return (
-    <div ref={ref} className={className} style={style}>
+    <Tag ref={ref} className={className} style={style}>
       <span className="inline-flex flex-wrap justify-center">
         {words.map(({ word, className: wordClassName, breakAfter }, i) => (
           <Fragment key={`${word}-${i}`}>
@@ -63,6 +67,6 @@ export default function WordsPullUpMultiStyle({
           </Fragment>
         ))}
       </span>
-    </div>
+    </Tag>
   )
 }

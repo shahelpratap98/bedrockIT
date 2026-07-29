@@ -16,6 +16,7 @@ export default function PageHeader({ label, segments, intro }: PageHeaderProps) 
       <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs">{label}</p>
 
       <WordsPullUpMultiStyle
+        as="h1"
         className="mx-auto mt-6 max-w-4xl text-3xl leading-[0.95] sm:text-4xl sm:leading-[0.9] md:text-5xl lg:text-6xl xl:text-7xl"
         style={{ color: '#E1E0CC' }}
         segments={segments}

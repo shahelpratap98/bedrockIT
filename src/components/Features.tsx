@@ -74,6 +74,7 @@ export default function Features() {
 
       <div className="relative mx-auto w-full max-w-7xl">
         <WordsPullUpMultiStyle
+          as="h2"
           className="mx-auto max-w-3xl text-center text-xl font-normal leading-tight sm:text-2xl md:text-3xl lg:text-4xl"
           style={{ color: '#E1E0CC' }}
           segments={[

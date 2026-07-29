@@ -1,0 +1,104 @@
+/**
+ * Per-route metadata, shared by the client (Seo component) and the prerender
+ * script, so the tags in the static HTML and the tags after hydration agree.
+ */
+
+// TODO: set this to the live domain before launch — Open Graph needs absolute
+// URLs, and link previews break if it is wrong. Override at build time with
+// SITE_URL=https://your-domain npm run build
+export const SITE = {
+  name: 'BedRock IT',
+  url: (import.meta.env.VITE_SITE_URL || 'https://bedrockit.co.nz').replace(/\/$/, ''),
+}
+
+export interface RouteSeo {
+  path: string
+  title: string
+  description: string
+  /** Keep out of search results (used for the 404 shell). */
+  noindex?: boolean
+}
+
+export const ROUTE_SEO: RouteSeo[] = [
+  {
+    path: '/',
+    title: 'BedRock IT — Managed IT, Cloud and Websites',
+    description:
+      'Managed IT support, cloud migration, cyber security and SEO optimised websites for businesses that cannot afford downtime. One team that answers the phone.',
+  },
+  {
+    path: '/our-story',
+    title: 'Our Story — BedRock IT',
+    description:
+      'How BedRock IT grew from two engineers and a van into a managed services team, and the principles behind the way we run IT for our clients.',
+  },
+  {
+    path: '/services',
+    title: 'IT Services — BedRock IT',
+    description:
+      'Managed IT support, cloud and migration, cyber security, networks, website development and project rollouts — scoped and priced before any work begins.',
+  },
+  {
+    path: '/support',
+    title: 'IT Support and Response Times — BedRock IT',
+    description:
+      'Phone, WhatsApp and email support staffed by engineers who already know your setup, with P1 to P4 response targets written into the agreement.',
+  },
+  {
+    path: '/cloud',
+    title: 'Cloud Migration — BedRock IT',
+    description:
+      'Microsoft 365 and Azure migrations run in stages with a tested rollback at every step, so moving to the cloud does not cost you a working day.',
+  },
+  {
+    path: '/contact',
+    title: 'Contact BedRock IT',
+    description:
+      'Tell us what you are running today and we will come back within one business day with an honest read on what we would change and what it would cost.',
+  },
+]
+
+export const NOT_FOUND_SEO: RouteSeo = {
+  path: '/404',
+  title: 'Page Not Found — BedRock IT',
+  description: 'The page you were looking for does not exist.',
+  noindex: true,
+}
+
+export function seoFor(pathname: string): RouteSeo {
+  const normalised = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname
+  return ROUTE_SEO.find((route) => route.path === normalised) ?? NOT_FOUND_SEO
+}
+
+function escapeAttr(value: string) {
+  return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
+}
+
+/**
+ * Absolute URL for a route. `basePrefix` is the deploy subpath — "/" for a
+ * domain root, "/bedrockIT/" for a GitHub Pages project site.
+ */
+export function canonicalFor(seo: RouteSeo, basePrefix = '/'): string {
+  const prefix = basePrefix.replace(/\/$/, '')
+  return `${SITE.url}${prefix}${seo.path === '/' ? '/' : seo.path}`
+}
+
+/** Head tags as an HTML string, for the prerendered pages. */
+export function renderHeadTags(seo: RouteSeo, basePrefix = '/'): string {
+  const canonical = canonicalFor(seo, basePrefix)
+  const tags = [
+    `<title>${escapeAttr(seo.title)}</title>`,
+    `<meta name="description" content="${escapeAttr(seo.description)}" />`,
+    `<link rel="canonical" href="${escapeAttr(canonical)}" />`,
+    `<meta property="og:type" content="website" />`,
+    `<meta property="og:site_name" content="${escapeAttr(SITE.name)}" />`,
+    `<meta property="og:title" content="${escapeAttr(seo.title)}" />`,
+    `<meta property="og:description" content="${escapeAttr(seo.description)}" />`,
+    `<meta property="og:url" content="${escapeAttr(canonical)}" />`,
+    `<meta name="twitter:card" content="summary_large_image" />`,
+    `<meta name="twitter:title" content="${escapeAttr(seo.title)}" />`,
+    `<meta name="twitter:description" content="${escapeAttr(seo.description)}" />`,
+  ]
+  if (seo.noindex) tags.push(`<meta name="robots" content="noindex" />`)
+  return tags.join('\n    ')
+}

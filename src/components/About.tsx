@@ -44,6 +44,7 @@ export default function About() {
         <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs">Managed IT</p>
 
         <WordsPullUpMultiStyle
+          as="h2"
           className="mx-auto mt-8 max-w-3xl text-3xl leading-[0.95] sm:text-4xl sm:leading-[0.9] md:text-5xl lg:text-6xl xl:text-7xl"
           style={{ color: '#E1E0CC' }}
           segments={[

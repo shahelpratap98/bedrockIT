@@ -7,6 +7,8 @@ interface WordsPullUpProps {
   /** Renders a superscript asterisk hanging off the final character of the last word. */
   showAsterisk?: boolean
   style?: React.CSSProperties
+  /** Element to render, so headings can be semantic. */
+  as?: 'div' | 'h1' | 'h2'
 }
 
 const pullUpVariant = {
@@ -27,13 +29,15 @@ export default function WordsPullUp({
   className = '',
   showAsterisk = false,
   style,
+  as = 'div',
 }: WordsPullUpProps) {
   const words = text.split(' ')
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true })
+  const Tag = as as React.ElementType
 
   return (
-    <div ref={ref} className={`flex flex-wrap ${className}`} style={style}>
+    <Tag ref={ref} className={`flex flex-wrap ${className}`} style={style}>
       {words.map((word, i) => {
         const isLast = i === words.length - 1
         const head = word.slice(0, -1)
@@ -62,6 +66,6 @@ export default function WordsPullUp({
           </motion.span>
         )
       })}
-    </div>
+    </Tag>
   )
 }

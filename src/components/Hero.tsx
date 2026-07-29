@@ -33,6 +33,7 @@ export default function Hero() {
             <div className="col-span-12 lg:col-span-8">
               <WordsPullUp
                 text="BedRock IT"
+                as="h1"
                 showAsterisk
                 className="text-[22vw] font-medium leading-[0.85] tracking-[-0.07em] sm:text-[20vw] md:text-[18vw] lg:text-[15vw] xl:text-[14vw] 2xl:text-[15vw]"
                 style={{ color: '#E1E0CC' }}
