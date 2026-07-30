@@ -1,5 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import ErrorBoundary from './components/ErrorBoundary'
 import Footer from './components/Footer'
 import Seo from './components/Seo'
 import Home from './pages/Home'
@@ -11,9 +12,17 @@ import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 import { SERVICES } from './data/services'
 
+// useLayoutEffect has no effect during prerendering and warns if left in place.
+const useBeforePaint = typeof window === 'undefined' ? useEffect : useLayoutEffect
+
 function ScrollToTop() {
   const { pathname } = useLocation()
-  useEffect(() => window.scrollTo(0, 0), [pathname])
+  // Runs before the browser paints, so a new route can never be shown at the
+  // previous page's scroll offset — which looks like a blank screen when the
+  // old offset lands past the end of the new page's content.
+  useBeforePaint(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
   return null
 }
 
@@ -23,7 +32,7 @@ function ScrollToTop() {
  */
 export default function AppRoutes() {
   return (
-    <>
+    <ErrorBoundary>
       <ScrollToTop />
       <Seo />
       <main className="bg-black">
@@ -47,6 +56,6 @@ export default function AppRoutes() {
         </Routes>
         <Footer />
       </main>
-    </>
+    </ErrorBoundary>
   )
 }
