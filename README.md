@@ -84,6 +84,36 @@ The build also writes `sitemap.xml` and `robots.txt` from the same route list.
 
 Headings are semantic: one `<h1>` per page, `<h2>` for section headers, `<h3>` on cards.
 
+## Contact form
+
+`api/contact.ts` is a Vercel Edge Function that posts the enquiry to Resend. No npm
+dependency — it calls the REST API with `fetch`.
+
+To turn it on:
+
+1. Create a Resend account and an API key.
+2. In Vercel → Settings → Environment Variables, add `RESEND_API_KEY`.
+3. Redeploy.
+
+Until then the endpoint returns `501` and the form falls back to opening the visitor's mail
+client, so nothing is silently lost.
+
+| Variable | Required | Default |
+| --- | --- | --- |
+| `RESEND_API_KEY` | yes | — |
+| `CONTACT_TO` | no | `shahel.pratap98@gmail.com` |
+| `CONTACT_FROM` | no | `BedRock IT <onboarding@resend.dev>` |
+
+`CONTACT_FROM` must be on a domain verified in Resend. The default sends only to your own
+account address — fine to start, but verify `bedrock-it.co.nz` in Resend and set
+`CONTACT_FROM` to something like `enquiries@bedrock-it.co.nz` so mail is less likely to be
+filtered, and so you can send to other addresses.
+
+Replies go to the enquirer: the send sets `reply_to` to the address they typed.
+
+Spam handling is a honeypot field plus length and format validation. There is no rate
+limiting — if the form gets abused, add Vercel's WAF or a captcha.
+
 ## Deployment
 
 Every route is prerendered to its own `index.html`, so deep links resolve as real files on
@@ -117,9 +147,9 @@ base the build used. For a custom domain on Pages, build with `--base=/` instead
 
 ## Before going live
 
-- **Contact form has no backend.** `handleSubmit` in `src/pages/Contact.tsx` opens the
-  visitor's mail client via `mailto:`, which fails silently for webmail users. Point it at
-  a form endpoint instead.
+- **The contact form needs one environment variable.** See below — until `RESEND_API_KEY`
+  is set it falls back to opening the visitor's mail client, which fails silently for
+  webmail users.
 - **Response targets are placeholders.** The P1–P4 figures in `src/pages/Support.tsx` read
   as contractual commitments — replace them with the real numbers.
 - **Service copy needs your review.** `src/data/services.ts` describes capability and
