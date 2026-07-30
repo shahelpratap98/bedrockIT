@@ -49,6 +49,19 @@ function escapeHtml(value: string) {
 }
 
 export default async function handler(req: Request): Promise<Response> {
+  // GET /api/contact?check=1 — reports whether the mail key is present, so the
+  // setup can be confirmed without sending a real enquiry. Booleans only.
+  if (req.method === 'GET' && new URL(req.url).searchParams.has('check')) {
+    return json(
+      {
+        configured: Boolean(process.env.RESEND_API_KEY),
+        customFrom: Boolean(process.env.CONTACT_FROM),
+        customTo: Boolean(process.env.CONTACT_TO),
+      },
+      200,
+    )
+  }
+
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405)
 
   let payload: Payload
