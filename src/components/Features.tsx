@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Check, CloudCog, Globe, ShieldCheck, type LucideIcon } from 'lucide-react'
 import WordsPullUpMultiStyle from './WordsPullUpMultiStyle'
 
-// Swap this for your own footage when you have it.
-const CARD_VIDEO =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4'
+// Generated server-room clip, self-hosted from public/media. Swap the file to
+// change the footage. BASE_URL keeps subpath builds (GitHub Pages) working.
+const CARD_VIDEO = `${import.meta.env.BASE_URL}media/card-systems.mp4`
 
 interface FeatureCard {
   number: string
