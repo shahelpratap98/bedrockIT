@@ -1,14 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { SITE, canonicalFor, seoFor } from '../config/seo'
-
-const GOOGLE_TAG_ID = 'AW-18359431812'
-
-declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void
-  }
-}
+import { GOOGLE_TAG_ID } from '../config/analytics'
 
 function upsertMeta(attr: 'name' | 'property', key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`)

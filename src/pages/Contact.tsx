@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
 import { CONTACT, EMAIL_HREF, WHATSAPP_URL } from '../config/contact'
+import { CONVERSIONS, trackConversion } from '../config/analytics'
 
 const CONTACT_EMAIL = CONTACT.email
 
@@ -61,6 +62,7 @@ export default function Contact() {
       })
 
       if (res.ok) {
+        trackConversion(CONVERSIONS.contact)
         setUsedMailClient(false)
         setStatus('sent')
         return
@@ -69,6 +71,7 @@ export default function Contact() {
       // 501 means the mail service is not configured yet; anything else is a
       // real failure. Either way the visitor should not lose what they wrote.
       if (res.status === 501) {
+        trackConversion(CONVERSIONS.contact)
         openMailClient(fields)
         setUsedMailClient(true)
         setStatus('sent')
