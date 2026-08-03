@@ -2,6 +2,14 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { SITE, canonicalFor, seoFor } from '../config/seo'
 
+const GOOGLE_TAG_ID = 'AW-18359431812'
+
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void
+  }
+}
+
 function upsertMeta(attr: 'name' | 'property', key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`)
   if (!el) {
@@ -62,6 +70,10 @@ export default function Seo() {
     } else if (robots) {
       robots.remove()
     }
+
+    // The tag in index.html only fires on full page loads; client-side route
+    // changes must report themselves or Google sees one page per visit.
+    window.gtag?.('config', GOOGLE_TAG_ID, { page_path: pathname, page_title: seo.title })
   }, [pathname])
 
   return null
