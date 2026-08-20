@@ -103,8 +103,11 @@ export default function Footer() {
           </div>
         </div>
 
-        <p className="mt-10 text-[10px] text-gray-500">
-          © {new Date().getFullYear()} BedRock IT. All rights reserved.
+        <p className="mt-10 flex flex-wrap items-center gap-3 text-[10px] text-gray-500">
+          <span>© {new Date().getFullYear()} BedRock IT. All rights reserved.</span>
+          <Link to="/privacy" className="transition-colors hover:text-primary">
+            Privacy policy
+          </Link>
         </p>
       </div>
     </footer>

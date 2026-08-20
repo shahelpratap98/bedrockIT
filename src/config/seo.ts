@@ -74,6 +74,12 @@ export const ROUTE_SEO: RouteSeo[] = [
       'How existing clients reach the BedRock IT helpdesk by phone, WhatsApp or email, what counts as a P1, and the response targets we report against monthly.',
   },
   {
+    path: '/privacy',
+    title: 'Privacy Policy — BedRock IT',
+    description:
+      'How BedRock IT collects, uses and protects personal information from this website, including contact form enquiries and advertising measurement, under the NZ Privacy Act 2020.',
+  },
+  {
     path: '/contact',
     title: 'Contact BedRock IT',
     description:

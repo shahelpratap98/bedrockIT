@@ -9,6 +9,7 @@ import Services from './pages/Services'
 import ServicePage from './pages/ServicePage'
 import Support from './pages/Support'
 import Contact from './pages/Contact'
+import Privacy from './pages/Privacy'
 import NotFound from './pages/NotFound'
 import { SERVICES } from './data/services'
 
@@ -52,6 +53,7 @@ export default function AppRoutes() {
               to the 404 shell and this handles it client-side. */}
           <Route path="/cloud" element={<Navigate to="/services/cloud-migration" replace />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
