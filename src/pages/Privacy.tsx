@@ -36,7 +36,7 @@ const SECTIONS: Section[] = [
     title: 'Advertising and analytics',
     paragraphs: [
       `We use Google’s tag (gtag.js) to measure how the site is used and whether our advertising leads to enquiries. It records page views and fires an event when the contact form is submitted successfully. We do not pass the details you type into the form to Google.`,
-      `We may also use similar measurement tools from Meta (Facebook and Instagram) when we advertise on those platforms, which collect page-view data and set cookies to measure ad performance and build advertising audiences.`,
+      `We also use Meta's pixel (Facebook and Instagram), which records page views and sets cookies to measure how our advertising performs and to build advertising audiences. When the contact form is submitted successfully it reports that an enquiry happened, without the details you typed.`,
       `You can limit this measurement through your browser’s cookie controls, Google’s Ads Settings (adssettings.google.com), and Meta’s Ad Preferences.`,
     ],
   },
@@ -49,7 +49,7 @@ const SECTIONS: Section[] = [
       'Vercel — hosts the website and processes standard server logs.',
       'Resend — delivers contact form enquiries to our inbox as email.',
       'Google — advertising measurement, as described above.',
-      'Meta — advertising measurement, when in use, as described above.',
+      'Meta — advertising measurement, as described above.',
     ],
   },
   {

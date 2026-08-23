@@ -1,7 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { SITE, canonicalFor, seoFor } from '../config/seo'
-import { GOOGLE_TAG_ID } from '../config/analytics'
+import { GOOGLE_TAG_ID, trackMetaPageView } from '../config/analytics'
 
 function upsertMeta(attr: 'name' | 'property', key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`)
@@ -29,6 +29,7 @@ function upsertLink(rel: string, href: string) {
  */
 export default function Seo() {
   const { pathname } = useLocation()
+  const isFirstLoad = useRef(true)
 
   useEffect(() => {
     const seo = seoFor(pathname)
@@ -64,9 +65,16 @@ export default function Seo() {
       robots.remove()
     }
 
-    // The tag in index.html only fires on full page loads; client-side route
-    // changes must report themselves or Google sees one page per visit.
+    // The tags in index.html only fire on full page loads; client-side route
+    // changes must report themselves or the platforms see one page per visit.
+    // The pixel's base code already covered this first load — skip it once to
+    // avoid a double PageView.
     window.gtag?.('config', GOOGLE_TAG_ID, { page_path: pathname, page_title: seo.title })
+    if (isFirstLoad.current) {
+      isFirstLoad.current = false
+    } else {
+      trackMetaPageView()
+    }
   }, [pathname])
 
   return null
