@@ -16,7 +16,13 @@ const DETAILS = [
   { label: 'WhatsApp', value: 'Start a chat', href: WHATSAPP_URL, external: true },
 ]
 
-const SIZES = ['1 to 10 staff', '11 to 30 staff', '31 to 75 staff', 'More than 75 staff']
+const SERVICES = [
+  'Website development',
+  'Managed IT support',
+  'Cyber security',
+  'Cloud and migration',
+  'Something else',
+]
 
 const inputClass =
   'w-full rounded-lg border border-white/10 bg-black/40 px-4 py-3 text-xs text-[#E1E0CC] outline-none transition-colors placeholder:text-gray-500 focus:border-primary/50 sm:text-sm'
@@ -28,7 +34,7 @@ function openMailClient(fields: Record<string, string>) {
     `Company: ${fields.company}`,
     `Email: ${fields.email}`,
     `Phone: ${fields.phone}`,
-    `Team size: ${fields.size}`,
+    `Service: ${fields.service}`,
     '',
     fields.message,
   ].join('\n')
@@ -46,7 +52,7 @@ export default function Contact() {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     const fields = Object.fromEntries(
-      ['name', 'company', 'email', 'phone', 'size', 'message', 'website'].map((key) => [
+      ['name', 'company', 'email', 'phone', 'service', 'message', 'website'].map((key) => [
         key,
         String(data.get(key) ?? ''),
       ]),
@@ -207,12 +213,12 @@ export default function Contact() {
 
                   <label className="flex flex-col gap-2">
                     <span className="text-[10px] uppercase tracking-[0.2em] text-primary">
-                      Team size
+                      What do you need?
                     </span>
-                    <select name="size" className={inputClass} defaultValue={SIZES[0]}>
-                      {SIZES.map((size) => (
-                        <option key={size} value={size} className="bg-[#101010]">
-                          {size}
+                    <select name="service" className={inputClass} defaultValue={SERVICES[0]}>
+                      {SERVICES.map((service) => (
+                        <option key={service} value={service} className="bg-[#101010]">
+                          {service}
                         </option>
                       ))}
                     </select>

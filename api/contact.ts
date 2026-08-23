@@ -16,13 +16,15 @@ declare const process: { env: Record<string, string | undefined> }
 const DEFAULT_TO = 'shahel.pratap98@gmail.com'
 const DEFAULT_FROM = 'BedRock IT <onboarding@resend.dev>'
 
-const LIMITS = { name: 120, company: 160, email: 200, phone: 60, size: 60, message: 5000 }
+const LIMITS = { name: 120, company: 160, email: 200, phone: 60, service: 80, message: 5000 }
 
 interface Payload {
   name?: string
   company?: string
   email?: string
   phone?: string
+  service?: string
+  /** Legacy field name for service, sent by cached older builds. */
   size?: string
   message?: string
   /** Honeypot — real people never see this field, so anything in it is a bot. */
@@ -79,7 +81,7 @@ export default async function handler(req: Request): Promise<Response> {
   const message = clean(payload.message, LIMITS.message)
   const company = clean(payload.company, LIMITS.company)
   const phone = clean(payload.phone, LIMITS.phone)
-  const size = clean(payload.size, LIMITS.size)
+  const service = clean(payload.service, LIMITS.service) || clean(payload.size, LIMITS.service)
 
   const missing = [!name && 'name', !email && 'email', !message && 'message'].filter(Boolean)
   if (missing.length) return json({ error: `Missing: ${missing.join(', ')}` }, 400)
@@ -96,7 +98,7 @@ export default async function handler(req: Request): Promise<Response> {
     ['Company', company || '—'],
     ['Email', email],
     ['Phone', phone || '—'],
-    ['Team size', size || '—'],
+    ['Service', service || '—'],
   ]
 
   const text = [...rows.map(([k, v]) => `${k}: ${v}`), '', message].join('\n')
