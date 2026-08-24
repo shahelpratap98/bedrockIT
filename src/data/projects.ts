@@ -6,6 +6,8 @@ export interface Project {
   image: string
   sector: string
   summary: string
+  /** Overrides the link text when the domain itself would name the host. */
+  linkLabel?: string
   /** Short, checkable statements about what was built — no invented metrics. */
   highlights: string[]
 }
@@ -22,7 +24,7 @@ export const PROJECTS: Project[] = [
     highlights: [
       'Product catalogue with cart and trade accounts',
       'Reorder in one click from a previous order',
-      'Hosted on Vercel, built to grow with the catalogue',
+      'Secure hosting platform, built to grow with the catalogue',
     ],
   },
   {
@@ -36,7 +38,7 @@ export const PROJECTS: Project[] = [
     highlights: [
       'Service pages for each type of civil work',
       'Prerendered for search, so every page can rank',
-      'Hosted on Vercel with automatic HTTPS',
+      'Secure hosting platform with automatic HTTPS',
     ],
   },
   {
@@ -50,7 +52,7 @@ export const PROJECTS: Project[] = [
     highlights: [
       'Quote form in the hero, not buried on a contact page',
       'Service pages covering lawns, gardens and outdoor cleaning',
-      'Hosted on Vercel with automatic HTTPS',
+      'Secure hosting platform with automatic HTTPS',
     ],
   },
   {
@@ -64,7 +66,7 @@ export const PROJECTS: Project[] = [
     highlights: [
       'Written for homeowners and builders, not engineers',
       'Fast static build, no page-load spinner',
-      'Hosted on Vercel with automatic HTTPS',
+      'Secure hosting platform with automatic HTTPS',
     ],
   },
   {
@@ -78,7 +80,7 @@ export const PROJECTS: Project[] = [
     highlights: [
       'Service pages structured around what people search for',
       'Quote request and click-to-call on every screen',
-      'Hosted on Vercel with a hardened security policy',
+      'Secure hosting platform with a hardened security policy',
     ],
   },
   {
@@ -92,12 +94,13 @@ export const PROJECTS: Project[] = [
     highlights: [
       'Visa pathways explained in plain language',
       'Enquiry form that gathers the right detail first time',
-      'Hosted on Vercel with a strict content security policy',
+      'Secure hosting platform with a strict content security policy',
     ],
   },
   {
     name: 'Kinderland Educare',
     domain: 'kinderland-educare.vercel.app',
+    linkLabel: 'View live site',
     url: 'https://kinderland-educare.vercel.app',
     image: 'kinderland-educare.jpg',
     sector: 'Early childhood education',
@@ -106,7 +109,7 @@ export const PROJECTS: Project[] = [
     highlights: [
       'Written for parents comparing centres',
       'Enrolment enquiry as the clear next step',
-      'Hosted on Vercel with automatic HTTPS',
+      'Secure hosting platform with automatic HTTPS',
     ],
   },
 ]

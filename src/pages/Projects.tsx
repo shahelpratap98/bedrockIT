@@ -68,7 +68,7 @@ export default function Projects() {
                   </ul>
 
                   <span className="mt-auto flex items-center gap-1.5 pt-8 text-xs text-primary">
-                    {project.domain}
+                    {project.linkLabel ?? project.domain}
                     <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </span>
                 </div>
