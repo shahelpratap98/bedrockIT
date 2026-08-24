@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
 import BookCallButton from '../components/BookCallButton'
+import Reviews from '../components/Reviews'
 import { PROJECTS } from '../data/projects'
 
 const BASE = import.meta.env.BASE_URL
@@ -77,6 +78,8 @@ export default function Projects() {
           ))}
         </div>
       </section>
+
+      <Reviews />
 
       {/* Close */}
       <section className="px-4 pb-20 sm:px-6 md:pb-28">
