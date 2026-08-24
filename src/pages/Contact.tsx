@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
-import { CONTACT, EMAIL_HREF, WHATSAPP_URL } from '../config/contact'
+import { CONTACT, EMAIL_HREF, MESSENGER_URL, WHATSAPP_URL } from '../config/contact'
 import { trackEnquiryConversion } from '../config/analytics'
 
 const CONTACT_EMAIL = CONTACT.email
@@ -14,6 +14,7 @@ const DETAILS = [
   { label: 'Email', value: CONTACT_EMAIL, href: EMAIL_HREF },
   { label: 'Phone', value: CONTACT.phoneDisplay, href: CONTACT.phoneHref },
   { label: 'WhatsApp', value: 'Start a chat', href: WHATSAPP_URL, external: true },
+  { label: 'Messenger', value: 'Message us on Facebook', href: MESSENGER_URL, external: true },
 ]
 
 const SERVICES = [

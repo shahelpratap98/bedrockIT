@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { NAV_ITEMS } from './Navbar'
 import BookCallButton from './BookCallButton'
-import { CONTACT, EMAIL_HREF, WHATSAPP_URL } from '../config/contact'
+import { CONTACT, EMAIL_HREF, MESSENGER_URL, WHATSAPP_URL } from '../config/contact'
 import { SERVICES } from '../data/services'
 
 export default function Footer() {
@@ -88,6 +88,16 @@ export default function Footer() {
                   className="transition-colors hover:text-primary"
                 >
                   Message us on WhatsApp
+                </a>
+              </li>
+              <li>
+                <a
+                  href={MESSENGER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-primary"
+                >
+                  Message us on Messenger
                 </a>
               </li>
             </ul>

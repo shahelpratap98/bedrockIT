@@ -22,7 +22,7 @@ const SECTIONS: Section[] = [
     paragraphs: [`We collect personal information in three ways:`],
     bullets: [
       'Contact form — when you send an enquiry we receive the details you type: your name, company, email address, phone number, team size and message.',
-      'Direct contact — if you phone, email or message us on WhatsApp, we receive whatever you choose to share, handled under that platform’s own terms.',
+      'Direct contact — if you phone, email or message us on WhatsApp or Messenger, we receive whatever you choose to share, handled under that platform’s own terms.',
       'Technical data — like most websites, our hosting provider records standard server logs (IP address, browser type, pages requested) and our advertising tags set cookies and similar identifiers, described below.',
     ],
   },
