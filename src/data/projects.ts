@@ -53,4 +53,46 @@ export const PROJECTS: Project[] = [
       'Hosted on Vercel with a strict content security policy',
     ],
   },
+  {
+    name: 'Jai Civil',
+    domain: 'jaicivil.com',
+    url: 'https://jaicivil.com',
+    image: 'jai-civil.jpg',
+    sector: 'Earthworks and civil construction',
+    summary:
+      'A site for a Papakura civil contractor bidding for work that starts with a phone call. Built to answer the first questions a project manager asks: what do you do, where do you work, and can you handle this job.',
+    highlights: [
+      'Service pages for each type of civil work',
+      'Prerendered for search, so every page can rank',
+      'Hosted on Vercel with automatic HTTPS',
+    ],
+  },
+  {
+    name: 'Bsmart Eco Products',
+    domain: 'bsmarteco.co.nz',
+    url: 'https://bsmarteco.co.nz',
+    image: 'bsmart-eco.jpg',
+    sector: 'Wholesale packaging and hygiene supplies',
+    summary:
+      'A trade storefront for an Auckland wholesaler, where the buyer is a cafe or facilities manager reordering the same items. Product browsing, trade accounts and repeat ordering are the whole job.',
+    highlights: [
+      'Product catalogue with cart and trade accounts',
+      'Reorder in one click from a previous order',
+      'Hosted on Vercel, built to grow with the catalogue',
+    ],
+  },
+  {
+    name: 'Kinderland Educare',
+    domain: 'kinderlandeducare.co.nz',
+    url: 'https://kinderlandeducare.co.nz',
+    image: 'kinderland-educare.jpg',
+    sector: 'Early childhood education',
+    summary:
+      'A site for an early childhood centre, where parents are choosing who to trust with their child. Warm, clear and easy to navigate, with enrolment enquiries as the obvious next step.',
+    highlights: [
+      'Written for parents comparing centres',
+      'Enrolment enquiry as the clear next step',
+      'Centre information kept easy to find',
+    ],
+  },
 ]
