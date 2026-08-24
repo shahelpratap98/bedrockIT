@@ -68,6 +68,12 @@ export const ROUTE_SEO: RouteSeo[] = [
   },
   ...SERVICE_SEO,
   {
+    path: '/projects',
+    title: 'Our Projects — Websites We Have Built | BedRock IT',
+    description:
+      'Real business websites designed, built and hosted by BedRock IT — commercial HVAC, structural engineering and immigration advice. Every one live today.',
+  },
+  {
     path: '/support',
     title: 'Get IT Support — BedRock IT',
     description:
