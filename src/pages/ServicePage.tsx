@@ -29,9 +29,17 @@ export default function ServicePage({ service }: { service: Service }) {
 
       <PageHeader label={service.label} segments={service.headline} intro={service.intro} />
 
-      <p className="-mt-10 pb-10 text-center text-[10px] uppercase tracking-[0.2em] text-gray-500">
-        Last updated {service.lastUpdated}
-      </p>
+      {/*
+        The only CTA used to be the one in the outcomes block, roughly six
+        screens down on mobile. This puts one in the first viewport on all four
+        spokes.
+      */}
+      <div className="-mt-10 flex flex-col items-center gap-6 pb-14">
+        <BookCallButton />
+        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500">
+          Last updated {service.lastUpdated}
+        </p>
+      </div>
 
       {/* What's included */}
       <section className="px-4 pb-20 sm:px-6 md:pb-24">

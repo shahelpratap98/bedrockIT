@@ -28,7 +28,7 @@ export const SITE = {
 }
 
 const OG_IMAGE_ALT =
-  'A person working on a laptop on a sunlit hillside, under a dark cinematic sky.'
+  'BedRock IT — managed IT, cloud, cyber security and websites for New Zealand businesses, over a person working on a laptop on a sunlit hilltop above the clouds.'
 
 import { SERVICES } from '../data/services'
 import { CONTACT } from './contact'

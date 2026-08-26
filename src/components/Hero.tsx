@@ -1,21 +1,53 @@
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import WordsPullUp from './WordsPullUp'
 import Navbar from './Navbar'
 import BookCallButton from './BookCallButton'
 
-const HERO_VIDEO =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4'
+/**
+ * Self-hosted. This used to point at Higgsfield's CloudFront bucket, which put
+ * the homepage hero on a URL we do not control and cannot redeploy.
+ */
+const HERO_VIDEO = `${import.meta.env.BASE_URL}media/hero.mp4`
+const HERO_POSTER = `${import.meta.env.BASE_URL}media/hero-poster.jpg`
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
 export default function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  /**
+   * The poster paints straight away; the video only starts downloading once the
+   * first frame is on screen, so it never competes with the critical CSS and JS
+   * that the rest of the page is waiting on.
+   */
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || video.src) return
+
+    const attach = () => {
+      video.src = HERO_VIDEO
+      // autoPlay only fires on a source present at mount, so start it here.
+      void video.play().catch(() => {
+        /* Autoplay refused (battery saver, reduced data). Poster stays. */
+      })
+    }
+
+    // A timer rather than requestAnimationFrame: rAF never fires in a tab that
+    // is not compositing (opened in the background, say), which would strand
+    // the hero on its poster until the tab was focused.
+    const id = window.setTimeout(attach, 0)
+    return () => window.clearTimeout(id)
+  }, [])
+
   return (
     <section className="h-screen w-full p-4 md:p-6">
       <div className="relative h-full w-full overflow-hidden rounded-2xl md:rounded-[2rem]">
         <video
+          ref={videoRef}
           className="absolute inset-0 h-full w-full object-cover"
-          src={HERO_VIDEO}
-          autoPlay
+          poster={HERO_POSTER}
+          preload="none"
           loop
           muted
           playsInline

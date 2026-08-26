@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Check, CloudCog, Globe, ShieldCheck, type LucideIcon } from 'lucide-react'
@@ -7,6 +7,7 @@ import WordsPullUpMultiStyle from './WordsPullUpMultiStyle'
 // Generated server-room clip, self-hosted from public/media. Swap the file to
 // change the footage. BASE_URL keeps subpath builds (GitHub Pages) working.
 const CARD_VIDEO = `${import.meta.env.BASE_URL}media/card-systems.mp4`
+const CARD_POSTER = `${import.meta.env.BASE_URL}media/card-systems-poster.jpg`
 
 interface FeatureCard {
   number: string
@@ -67,6 +68,21 @@ const cardVariant = {
 export default function Features() {
   const gridRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(gridRef, { once: true, margin: '-100px' })
+  const cardVideoRef = useRef<HTMLVideoElement>(null)
+
+  /**
+   * This card sits well below the fold, so the clip only downloads once the
+   * grid scrolls into view. Until then the poster stands in for it.
+   */
+  useEffect(() => {
+    const video = cardVideoRef.current
+    if (!isInView || !video || video.src) return
+
+    video.src = CARD_VIDEO
+    void video.play().catch(() => {
+      /* Autoplay refused. Poster stays. */
+    })
+  }, [isInView])
 
   return (
     <section className="relative bg-black px-4 py-20 sm:px-6 md:py-28">
@@ -102,9 +118,10 @@ export default function Features() {
             className="relative h-72 overflow-hidden rounded-2xl lg:h-full"
           >
             <video
+              ref={cardVideoRef}
               className="absolute inset-0 h-full w-full object-cover"
-              src={CARD_VIDEO}
-              autoPlay
+              poster={CARD_POSTER}
+              preload="none"
               loop
               muted
               playsInline
