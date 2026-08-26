@@ -26,6 +26,8 @@ export interface Service {
   intro: string
   /** One-liner used on the hub and in cards. */
   summary: string
+  /** Shown on the page and kept honest — update when the content changes. */
+  lastUpdated: string
   seoTitle: string
   seoDescription: string
   includes: ServiceSection[]
@@ -37,6 +39,7 @@ export interface Service {
 export const SERVICES: Service[] = [
   {
     slug: 'website-development',
+    lastUpdated: '26 August 2026',
     name: 'Website development',
     label: 'Website development',
     headline: [
@@ -48,7 +51,7 @@ export const SERVICES: Service[] = [
     summary: 'SEO-optimised sites, hosting, DNS and monthly reporting.',
     seoTitle: 'Website Development and SEO — BedRock IT',
     seoDescription:
-      'Fast, SEO-optimised business websites with hosting, DNS management and monthly reporting on traffic, rankings and enquiries. Built and maintained by your IT team.',
+      'Custom business websites from $350, SEO-optimised with hosting, DNS management and monthly reporting. Fixed price before any work begins, built by your IT team.',
     includes: [
       {
         title: 'Search groundwork from the first commit',
@@ -105,6 +108,11 @@ export const SERVICES: Service[] = [
     ],
     faqs: [
       {
+        question: 'How much does a website cost in New Zealand?',
+        answer:
+          'Our custom websites start from $350, with the exact price fixed in writing before any work begins. That includes SEO setup, hosting and DNS management by the same team that runs your IT. Most quotes land between $350 and $650 depending on pages and features — you will know your number before committing to anything.',
+      },
+      {
         question: 'How long does a business website take?',
         answer:
           'A straightforward marketing site is usually a few weeks from scoped content to launch. The variable is almost never the build — it is how quickly copy, photography and approvals come back. We scope it properly and tell you the honest dependency list before starting.',
@@ -133,6 +141,7 @@ export const SERVICES: Service[] = [
   },
   {
     slug: 'managed-it-support',
+    lastUpdated: '26 August 2026',
     name: 'Managed IT support',
     label: 'Managed IT support',
     headline: [
@@ -207,6 +216,7 @@ export const SERVICES: Service[] = [
   },
   {
     slug: 'cyber-security',
+    lastUpdated: '26 August 2026',
     name: 'Cyber security',
     label: 'Cyber security',
     headline: [
@@ -281,6 +291,7 @@ export const SERVICES: Service[] = [
   },
   {
     slug: 'cloud-migration',
+    lastUpdated: '26 August 2026',
     name: 'Cloud and migration',
     label: 'Cloud',
     headline: [

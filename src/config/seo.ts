@@ -31,6 +31,7 @@ const OG_IMAGE_ALT =
   'A person working on a laptop on a sunlit hillside, under a dark cinematic sky.'
 
 import { SERVICES } from '../data/services'
+import { CONTACT } from './contact'
 
 export interface RouteSeo {
   path: string
@@ -118,6 +119,28 @@ export function canonicalFor(seo: RouteSeo, basePrefix = '/', origin = SITE.url)
   return `${origin}${prefix}${seo.path === '/' ? '/' : seo.path}`
 }
 
+/**
+ * Organization schema, emitted on every prerendered page. "Bedrock" is a
+ * heavily contested name (a SaaS, a safety consultancy, AWS, Minecraft), so
+ * explicit entity signals — including sameAs to the Facebook page — do the
+ * disambiguation work for search and AI engines.
+ */
+function organizationSchema(origin: string): string {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE.name,
+    url: origin,
+    description:
+      'Managed IT support, cloud migration, cyber security and website development for New Zealand businesses.',
+    telephone: CONTACT.phoneDisplay,
+    email: CONTACT.email,
+    areaServed: 'NZ',
+    sameAs: ['https://www.facebook.com/' + CONTACT.messengerPageId],
+  }
+  return '<script type="application/ld+json">' + JSON.stringify(data) + '</script>'
+}
+
 /** Head tags as an HTML string, for the prerendered pages. */
 export function renderHeadTags(seo: RouteSeo, basePrefix = '/'): string {
   const canonical = canonicalFor(seo, basePrefix)
@@ -143,6 +166,8 @@ export function renderHeadTags(seo: RouteSeo, basePrefix = '/'): string {
       `<meta name="twitter:image" content="${escapeAttr(imageUrl)}" />`,
     )
   }
+
+  tags.push(organizationSchema(SITE.url))
 
   if (seo.noindex) tags.push(`<meta name="robots" content="noindex" />`)
   return tags.join('\n    ')
