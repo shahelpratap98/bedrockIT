@@ -12,6 +12,37 @@ body {
   background-color: #000000;
 }
 
+/*
+ * Entrance animation for above-the-fold content.
+ *
+ * The same rise-and-fade the rest of the site does with framer-motion, but in
+ * CSS so it does not wait on the JavaScript bundle. Anything animated by JS
+ * ships as opacity:0 and stays invisible until React hydrates, which made the
+ * hero heading — the largest contentful paint — hostage to a 380KB download.
+ * Below-the-fold headings keep using framer-motion, since they animate on
+ * scroll and genuinely need the observer.
+ */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise-in {
+  animation: rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise-in {
+    animation: none;
+  }
+}
+
 @layer utilities {
   /* Fractal noise overlaid on the hero video */
   .noise-overlay {

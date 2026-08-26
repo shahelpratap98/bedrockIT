@@ -8,7 +8,7 @@
  * React hydrates over it on load.
  *
  *   node scripts/build-site.mjs                              root-relative (Vercel)
- *   node scripts/build-site.mjs --base=/bedrockIT/ --fallback  subpath + 404.html
+ *   node scripts/build-site.mjs --base=/bedrockIT/            subpath build
  */
 import { execFileSync } from 'node:child_process'
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
@@ -18,7 +18,6 @@ import { pathToFileURL } from 'node:url'
 const args = process.argv.slice(2)
 const baseArg = args.find((arg) => arg.startsWith('--base='))
 const base = baseArg ? baseArg.slice('--base='.length) : '/'
-const wantFallback = args.includes('--fallback')
 
 const SSR_OUT = 'dist-ssr'
 
@@ -108,7 +107,7 @@ if (!existsSync(entry)) {
   process.exit(1)
 }
 
-const { render, notFoundHead, routes } = await import(pathToFileURL(entry).href)
+const { render, renderNotFound, routes } = await import(pathToFileURL(entry).href)
 const template = readFileSync(resolve('dist', 'index.html'), 'utf8')
 
 function writePage(outPath, html, head) {
@@ -128,11 +127,13 @@ for (const route of routes) {
   console.log(`  prerendered ${route}`)
 }
 
-if (wantFallback) {
-  // Shell only: the requested path is unknown at build time, so let the client
-  // render it rather than shipping markup that will not match.
-  writePage(resolve('dist', '404.html'), '', notFoundHead())
-  console.log('  wrote 404.html (client-rendered shell)')
+// Always written, not just for subpath builds. Vercel serves this file with a
+// real HTTP 404 for any unmatched path, which is what stops every typo and
+// stale link from returning 200 with the homepage inside it.
+{
+  const { html, head } = renderNotFound()
+  writePage(resolve('dist', '404.html'), html, head)
+  console.log('  prerendered 404.html')
 }
 
 // Search engine plumbing. Absolute URLs, so they need the real origin.

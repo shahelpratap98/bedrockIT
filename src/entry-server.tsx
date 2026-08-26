@@ -15,9 +15,18 @@ export function render(url: string) {
   return { html, head: renderHeadTags(seoFor(url), BASE) }
 }
 
-/** Head tags for the client-only 404 shell (no markup is prerendered for it). */
-export function notFoundHead() {
-  return renderHeadTags(NOT_FOUND_SEO, BASE)
+/**
+ * The 404 page, rendered for real rather than shipped as an empty shell. The
+ * component shows the same thing whatever the unknown path was, so this markup
+ * is valid for every miss and hydrates cleanly over any of them.
+ */
+export function renderNotFound() {
+  const html = renderToString(
+    <StaticRouter location="/404">
+      <AppRoutes />
+    </StaticRouter>,
+  )
+  return { html, head: renderHeadTags(NOT_FOUND_SEO, BASE) }
 }
 
 export const routes = ROUTE_SEO.map((route) => route.path)

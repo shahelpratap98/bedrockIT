@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
 import WordsPullUp from './WordsPullUp'
 import Navbar from './Navbar'
 import BookCallButton from './BookCallButton'
@@ -10,8 +9,6 @@ import BookCallButton from './BookCallButton'
  */
 const HERO_VIDEO = `${import.meta.env.BASE_URL}media/hero.mp4`
 const HERO_POSTER = `${import.meta.env.BASE_URL}media/hero-poster.jpg`
-
-const EASE = [0.16, 1, 0.3, 1] as const
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -67,31 +64,25 @@ export default function Hero() {
                 text="BedRock IT"
                 as="h1"
                 showAsterisk
+                immediate
                 className="text-[22vw] font-medium leading-[0.85] tracking-[-0.07em] sm:text-[20vw] md:text-[18vw] lg:text-[15vw] xl:text-[14vw] 2xl:text-[15vw]"
                 style={{ color: '#E1E0CC' }}
               />
             </div>
 
             <div className="col-span-12 flex flex-col items-start gap-5 pb-6 sm:gap-6 md:pb-10 lg:col-span-4">
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5, ease: EASE }}
-                className="max-w-md text-xs text-primary/70 sm:text-sm md:text-base"
-                style={{ lineHeight: 1.2 }}
+              <p
+                className="rise-in max-w-md text-xs text-primary/70 sm:text-sm md:text-base"
+                style={{ lineHeight: 1.2, animationDelay: '0.5s' }}
               >
                 BedRock IT is a managed technology partner for businesses that cannot afford
                 downtime. Websites, cloud, networks and security — built, monitored and supported by
                 one team that actually answers the phone.
-              </motion.p>
+              </p>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.7, ease: EASE }}
-              >
+              <div className="rise-in" style={{ animationDelay: '0.7s' }}>
                 <BookCallButton large />
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>
