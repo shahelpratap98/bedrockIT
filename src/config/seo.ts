@@ -125,10 +125,12 @@ export function canonicalFor(seo: RouteSeo, basePrefix = '/', origin = SITE.url)
  * explicit entity signals — including sameAs to the Facebook page — do the
  * disambiguation work for search and AI engines.
  */
-function organizationSchema(origin: string): string {
-  const data = {
-    '@context': 'https://schema.org',
+function organizationSchema(origin: string) {
+  return {
     '@type': 'Organization',
+    // Stable identifier so the other blocks can reference this entity by @id
+    // instead of restating it.
+    '@id': `${origin}/#organization`,
     name: SITE.name,
     url: origin,
     description:
@@ -138,6 +140,85 @@ function organizationSchema(origin: string): string {
     areaServed: 'NZ',
     sameAs: ['https://www.facebook.com/' + CONTACT.messengerPageId],
   }
+}
+
+/** Trail from the home page down to this route, for the breadcrumb rich result. */
+function breadcrumbSchema(seo: RouteSeo, origin: string) {
+  if (seo.path === '/') return null
+
+  const segments = seo.path.split('/').filter(Boolean)
+  const items = [{ name: 'Home', item: `${origin}/` }]
+
+  segments.forEach((segment, i) => {
+    const path = `/${segments.slice(0, i + 1).join('/')}`
+
+    // A crumb names the page; it does not sell it. Service titles carry
+    // marketing ("Custom Websites From $350 — …"), so prefer the service's own
+    // name and only fall back to trimming the title.
+    const service = SERVICES.find((entry) => `/services/${entry.slug}` === path)
+    const match = ROUTE_SEO.find((route) => route.path === path)
+    const name =
+      service?.name ??
+      (match
+        ? match.title.split(/\s+[—|]\s+/)[0]
+        : segment.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()))
+
+    items.push({ name, item: `${origin}${path}` })
+  })
+
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((entry, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: entry.name,
+      item: entry.item,
+    })),
+  }
+}
+
+/** What is actually being sold, on the pages that sell it. */
+function serviceSchema(seo: RouteSeo, origin: string) {
+  const slug = seo.path.startsWith('/services/') ? seo.path.slice('/services/'.length) : null
+  const service = slug ? SERVICES.find((entry) => entry.slug === slug) : null
+  if (!service) return null
+
+  return {
+    '@type': 'Service',
+    name: service.name,
+    serviceType: service.name,
+    description: service.summary,
+    provider: { '@id': `${origin}/#organization` },
+    areaServed: 'NZ',
+    url: `${origin}${seo.path}`,
+  }
+}
+
+/**
+ * One @graph rather than several loose blocks, so the entities can reference
+ * each other by @id and search engines read them as one connected description
+ * of the site instead of unrelated fragments.
+ */
+function schemaGraph(seo: RouteSeo, origin: string): string {
+  const graph: Record<string, unknown>[] = [organizationSchema(origin)]
+
+  if (seo.path === '/') {
+    graph.push({
+      '@type': 'WebSite',
+      '@id': `${origin}/#website`,
+      name: SITE.name,
+      url: origin,
+      publisher: { '@id': `${origin}/#organization` },
+    })
+  }
+
+  const breadcrumb = breadcrumbSchema(seo, origin)
+  if (breadcrumb) graph.push(breadcrumb)
+
+  const service = serviceSchema(seo, origin)
+  if (service) graph.push(service)
+
+  const data = { '@context': 'https://schema.org', '@graph': graph }
   return '<script type="application/ld+json">' + JSON.stringify(data) + '</script>'
 }
 
@@ -167,7 +248,7 @@ export function renderHeadTags(seo: RouteSeo, basePrefix = '/'): string {
     )
   }
 
-  tags.push(organizationSchema(SITE.url))
+  tags.push(schemaGraph(seo, SITE.url))
 
   if (seo.noindex) tags.push(`<meta name="robots" content="noindex" />`)
   return tags.join('\n    ')

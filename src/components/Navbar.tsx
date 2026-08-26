@@ -27,7 +27,7 @@ export default function Navbar({ variant = 'overlay' }: NavbarProps) {
           <li key={item.to}>
             <Link
               to={item.to}
-              className="whitespace-nowrap text-[10px] transition-colors duration-200 sm:text-xs md:text-sm"
+              className="inline-flex min-h-[44px] items-center whitespace-nowrap px-1 text-[10px] transition-colors duration-200 sm:min-h-0 sm:px-0 sm:text-xs md:text-sm"
               style={{ color: isActive ? ACTIVE : IDLE }}
               onMouseEnter={(e) => (e.currentTarget.style.color = ACTIVE)}
               onMouseLeave={(e) => (e.currentTarget.style.color = isActive ? ACTIVE : IDLE)}
@@ -56,7 +56,7 @@ export default function Navbar({ variant = 'overlay' }: NavbarProps) {
   }
 
   return (
-    <nav className="absolute left-1/2 top-0 z-20 -translate-x-1/2 rounded-b-2xl bg-black px-4 py-2 md:rounded-b-3xl md:px-8">
+    <nav className="absolute left-1/2 top-0 z-20 -translate-x-1/2 rounded-b-2xl bg-black px-4 py-0 sm:py-2 md:rounded-b-3xl md:px-8">
       {links}
     </nav>
   )

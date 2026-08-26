@@ -30,6 +30,12 @@ export interface Service {
   lastUpdated: string
   seoTitle: string
   seoDescription: string
+  /**
+   * Names from src/data/projects.ts to show as proof on this page. Only set
+   * where the work genuinely evidences the service — website screenshots are
+   * not evidence of a cloud migration.
+   */
+  relatedProjects?: string[]
   includes: ServiceSection[]
   process?: ProcessStep[]
   outcomes: string[]
@@ -49,9 +55,10 @@ export const SERVICES: Service[] = [
     intro:
       'A site that looks good but never appears in search is an expensive brochure. We build fast, accessible sites with the technical groundwork search engines actually reward, then report on what they do once live.',
     summary: 'SEO-optimised sites, hosting, DNS and monthly reporting.',
-    seoTitle: 'Website Development and SEO — BedRock IT',
+    seoTitle: 'Custom Websites From $350 — Website Development NZ | BedRock IT',
     seoDescription:
-      'Custom business websites from $350, SEO-optimised with hosting, DNS management and monthly reporting. Fixed price before any work begins, built by your IT team.',
+      'Custom business websites from $350, SEO-optimised with hosting, DNS management and monthly reporting. Fixed price agreed before any work begins.',
+    relatedProjects: ['Bsmart Eco Products', 'Jai Civil', 'Canopy Property Services'],
     includes: [
       {
         title: 'Search groundwork from the first commit',
@@ -153,7 +160,7 @@ export const SERVICES: Service[] = [
     summary: 'Unlimited helpdesk, monitoring and maintenance on a fixed fee.',
     seoTitle: 'Managed IT Support — BedRock IT',
     seoDescription:
-      'Outsourced IT support on a fixed monthly fee: unlimited helpdesk, 24/7 monitoring, patching, onboarding and a named engineer who knows your environment.',
+      'Outsourced IT support for New Zealand businesses on a fixed monthly fee: unlimited helpdesk, 24/7 monitoring, patching and a named engineer.',
     includes: [
       {
         title: 'Unlimited helpdesk',
@@ -228,7 +235,7 @@ export const SERVICES: Service[] = [
     summary: 'Multi-factor, endpoint protection, staff training and patching.',
     seoTitle: 'Cyber Security for Small Business — BedRock IT',
     seoDescription:
-      'Practical cyber security for growing businesses: multi-factor authentication, endpoint protection, phishing training, patching and tested backups, on an auditable schedule.',
+      'Practical cyber security for New Zealand businesses: multi-factor authentication, endpoint protection, phishing training, patching and tested backups.',
     includes: [
       {
         title: 'Multi-factor authentication everywhere it matters',
@@ -303,7 +310,7 @@ export const SERVICES: Service[] = [
     summary: 'Microsoft 365 and Azure migrations, run in stages.',
     seoTitle: 'Cloud Migration and Microsoft 365 — BedRock IT',
     seoDescription:
-      'Staged Microsoft 365 and Azure migrations with tested rollback at every step, licensing review and backups proven by restore — planned around your trading hours.',
+      'Staged Microsoft 365 and Azure migrations for New Zealand businesses, with tested rollback at every step and backups proven by restore.',
     includes: [
       {
         title: 'Microsoft 365 and Azure set up properly',

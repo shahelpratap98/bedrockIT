@@ -7,10 +7,16 @@ import Faqs from '../components/Faqs'
 import JsonLd from '../components/JsonLd'
 import BookCallButton from '../components/BookCallButton'
 import { SERVICES, type Service } from '../data/services'
+import { PROJECTS } from '../data/projects'
+
+const BASE = import.meta.env.BASE_URL
 
 /** Shared layout for every service spoke, driven by src/data/services.ts. */
 export default function ServicePage({ service }: { service: Service }) {
   const others = SERVICES.filter((other) => other.slug !== service.slug)
+  const proof = (service.relatedProjects ?? [])
+    .map((name) => PROJECTS.find((project) => project.name === name))
+    .filter((project): project is (typeof PROJECTS)[number] => Boolean(project))
 
   const faqSchema = {
     '@context': 'https://schema.org',
@@ -109,6 +115,61 @@ export default function ServicePage({ service }: { service: Service }) {
           <BookCallButton className="mt-10" label="Talk it through" />
         </div>
       </section>
+
+      {/*
+        Proof, immediately before the FAQ. Only rendered where the work
+        actually evidences this service — see relatedProjects in the data.
+      */}
+      {proof.length > 0 && (
+        <section className="px-4 pb-20 sm:px-6 md:pb-24">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="text-center text-xl sm:text-2xl md:text-3xl" style={{ color: '#E1E0CC' }}>
+              Sites we have built
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-center text-xs leading-relaxed text-gray-400 sm:text-sm">
+              Every one of these is live today. Open them and judge the work yourself.
+            </p>
+
+            <div className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-1">
+              {proof.map((project, i) => (
+                <Reveal key={project.name} index={i} className="h-full">
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex h-full flex-col overflow-hidden rounded-2xl bg-[#212121] transition-colors hover:bg-[#262626]"
+                  >
+                    <img
+                      src={`${BASE}media/projects/${project.image}`}
+                      alt={`The ${project.name} website homepage`}
+                      loading="lazy"
+                      width={1440}
+                      height={900}
+                      className="h-40 w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03] sm:h-44"
+                    />
+                    <div className="flex flex-1 flex-col p-5">
+                      <h3 className="text-base sm:text-lg" style={{ color: '#E1E0CC' }}>
+                        {project.name}
+                      </h3>
+                      <p className="mt-1 text-xs text-gray-500">{project.sector}</p>
+                      <span className="mt-auto flex items-center gap-1.5 pt-5 text-xs text-primary">
+                        {project.linkLabel ?? project.domain}
+                        <ArrowRight className="h-3.5 w-3.5 -rotate-45 transition-transform duration-300 group-hover:translate-x-0.5" />
+                      </span>
+                    </div>
+                  </a>
+                </Reveal>
+              ))}
+            </div>
+
+            <p className="mt-8 text-center text-xs text-gray-400 sm:text-sm">
+              <Link to="/projects" className="text-primary underline-offset-4 hover:underline">
+                See every site we have built
+              </Link>
+            </p>
+          </div>
+        </section>
+      )}
 
       <Faqs faqs={service.faqs} />
 
