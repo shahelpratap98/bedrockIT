@@ -5,7 +5,17 @@ schema, performance, visual, search-experience) plus the GEO analysis from
 earlier the same day. Every headline finding below was re-verified by hand
 against the live site or the source before being written down.
 
-## SEO Health Score: 64/100
+## Status — 26 August 2026
+
+Findings 1, 2, 3, 4, 5, 10, 14, 15 and 16 are **fixed and verified live**. The
+score below is the audit as first run; re-estimated after those fixes it is
+roughly **70/100**, with the remaining gap almost entirely in content depth,
+on-page targeting and external brand presence rather than engineering.
+
+Still open: 6, 7, 8, 9, 11, 12, 13, 17, 18, 19, 20 and everything under "Not a
+code problem".
+
+## SEO Health Score: 64/100 (as first measured)
 
 | Category | Weight | Score | Weighted |
 | --- | --- | --- | --- |
@@ -154,12 +164,28 @@ Profile carrying the reviews you already have.
 
 Sequenced by dependency and by what touches revenue first.
 
-1. `og:image` — one file, unblocks every ad and shared link (#5)
-2. Service-page CTA above the fold — one template edit, four pages (#4)
-3. Self-host and compress the videos — kills the third-party dependency and the LCP anchor together (#2)
-4. Scope the rewrite, ship a real 404 (#1)
-5. Un-hide the LCP text (#3)
-6. Security headers — same `vercel.json` edit as #4 (#10)
+1. ~~`og:image`~~ — done (#5)
+2. ~~Service-page CTA above the fold~~ — done, 378 px on a 375×812 phone (#4)
+3. ~~Self-host and compress the videos~~ — done, 20.9 MB eager → 0 (#2)
+4. ~~Scope the rewrite, ship a real 404~~ — done, unknown paths return 404 (#1)
+5. ~~Un-hide the LCP text~~ — done, hero renders with JS disabled (#3)
+6. ~~Security headers~~ — done, minus HSTS (see below) (#10)
 7. Correct the origin story and the business email (#8, #9)
 8. Price in the title, proof on the page (#6, #7)
 9. External presence — LinkedIn, directories, GBP (yours, not code)
+
+### Deliberately not done
+
+**HSTS `includeSubDomains` + `preload`** (#5 in the original Medium list).
+Both are easy to add and unpleasant to reverse: `includeSubDomains` forces
+HTTPS on every subdomain, including any that does not serve it yet, and
+`preload` bakes the domain into a list shipped inside browsers. That is a
+decision to make deliberately with knowledge of every subdomain in use, not a
+default to apply from an audit.
+
+**A stricter CSP.** The policy shipped carries `'unsafe-inline'` in
+`script-src`, because the gtag and Meta pixel bootstraps are inline and this is
+a static site with no server to mint nonces. That limits its value against XSS;
+what it does still buy is `object-src 'none'`, `base-uri`, `form-action`,
+`frame-ancestors` and `upgrade-insecure-requests`. Tightening it properly means
+moving those snippets out of the HTML.
