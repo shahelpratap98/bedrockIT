@@ -45,7 +45,7 @@ export interface Service {
 export const SERVICES: Service[] = [
   {
     slug: 'website-development',
-    lastUpdated: '26 August 2026',
+    lastUpdated: '27 August 2026',
     name: 'Website development',
     label: 'Website development',
     headline: [
@@ -122,7 +122,7 @@ export const SERVICES: Service[] = [
       {
         question: 'How long does a business website take?',
         answer:
-          'A straightforward marketing site is usually a few weeks from scoped content to launch. The variable is almost never the build — it is how quickly copy, photography and approvals come back. We scope it properly and tell you the honest dependency list before starting.',
+          'Seven days to live for a straightforward business site, from the point we have your content. The build is rarely the hold-up — what moves the date is how quickly copy, photos and approvals come back to us. We scope it properly and give you the honest dependency list before starting, so you know exactly what we need from you and when the seven days start.',
       },
       {
         question: 'Will a new site hurt our existing search rankings?',
