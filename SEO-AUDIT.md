@@ -7,13 +7,33 @@ against the live site or the source before being written down.
 
 ## Status — 26 August 2026
 
-Findings 1, 2, 3, 4, 5, 10, 14, 15 and 16 are **fixed and verified live**. The
-score below is the audit as first run; re-estimated after those fixes it is
-roughly **70/100**, with the remaining gap almost entirely in content depth,
-on-page targeting and external brand presence rather than engineering.
+Findings 1, 2, 3, 4, 5, 6, 7, 10, 14, 15, 16, 17, 19 and 20 are **fixed and
+verified live**. 12 and 13 are partly done — all four service meta descriptions
+now name New Zealand, and the website page links out to three real client sites
+and the portfolio, but the other three spokes still carry no location context
+in their body copy and no contextual in-body links.
 
-Still open: 6, 7, 8, 9, 11, 12, 13, 17, 18, 19, 20 and everything under "Not a
-code problem".
+The score below is the audit as first run. Re-estimated after these fixes it is
+roughly **76/100**, with the remaining gap almost entirely in content depth and
+external brand presence rather than engineering.
+
+**Still open and blocked on facts only the business can supply:**
+
+- **8 — business email.** Moving off the Gmail needs `hello@bedrock-it.co.nz`
+  to actually exist and receive mail first. Pointing the site at an address
+  that bounces would be worse than the Gmail.
+- **9 — founding narrative.** `/our-story` claims 2019 and "two engineers and a
+  van"; the service pages say "our engineers" and "a team". This copy was
+  generated during the build and never checked against fact. It needs the real
+  story, not a second guess.
+- **11 — thin service pages.** managed-it-support, cyber-security and
+  cloud-migration sit under the 800-word floor. The honest way to fix this is
+  worked examples, and there are no real managed-IT, security or migration
+  engagements on record to draw one from — every project in the portfolio is a
+  website build. Inventing a case study would repeat the mistake in 9.
+- **18 — redirect chain.** `http://bedrock-it.co.nz` still takes two hops to
+  reach `https://www.`. That is Vercel domain configuration rather than
+  anything in this repo.
 
 ## SEO Health Score: 64/100 (as first measured)
 
@@ -170,9 +190,10 @@ Sequenced by dependency and by what touches revenue first.
 4. ~~Scope the rewrite, ship a real 404~~ — done, unknown paths return 404 (#1)
 5. ~~Un-hide the LCP text~~ — done, hero renders with JS disabled (#3)
 6. ~~Security headers~~ — done, minus HSTS (see below) (#10)
-7. Correct the origin story and the business email (#8, #9)
-8. Price in the title, proof on the page (#6, #7)
-9. External presence — LinkedIn, directories, GBP (yours, not code)
+7. ~~Price in the title, proof on the page~~ — done (#6, #7)
+8. Correct the origin story and the business email (#8, #9) — **needs your input**
+9. Expand the three thin service pages (#11) — **needs real engagements to cite**
+10. External presence — LinkedIn, directories, GBP (yours, not code)
 
 ### Deliberately not done
 
