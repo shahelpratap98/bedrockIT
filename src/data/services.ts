@@ -45,7 +45,7 @@ export interface Service {
 export const SERVICES: Service[] = [
   {
     slug: 'website-development',
-    lastUpdated: '27 August 2026',
+    lastUpdated: '1 September 2026',
     name: 'Website development',
     label: 'Website development',
     headline: [
@@ -117,7 +117,12 @@ export const SERVICES: Service[] = [
       {
         question: 'How much does a website cost in New Zealand?',
         answer:
-          'Our custom websites start from $350, with the exact price fixed in writing before any work begins. That includes SEO setup, hosting and DNS management by the same team that runs your IT. Most quotes land between $350 and $650 depending on pages and features — you will know your number before committing to anything.',
+          'Our custom websites start from $350, with the exact price fixed in writing before any work begins. That one price covers the build, SEO setup, hosting and DNS management — there is no monthly hosting fee on top. Most quotes land between $350 and $650 depending on pages and features, and you will know your number before committing to anything.',
+      },
+      {
+        question: 'Is hosting included, or is there a monthly fee?',
+        answer:
+          'Hosting is included. There is no monthly hosting charge and no separate maintenance retainer — the price we agree before starting is the price for the site, its hosting and its DNS. The only ongoing cost is your domain name, which is renewed directly with the registrar for roughly $30 to $50 a year and stays in your name.',
       },
       {
         question: 'How long does a business website take?',
