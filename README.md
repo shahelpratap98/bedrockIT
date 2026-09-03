@@ -101,13 +101,16 @@ client, so nothing is silently lost.
 | Variable | Required | Default |
 | --- | --- | --- |
 | `RESEND_API_KEY` | yes | — |
-| `CONTACT_TO` | no | `shahel.pratap98@gmail.com` |
-| `CONTACT_FROM` | no | `BedRock IT <onboarding@resend.dev>` |
+| `CONTACT_TO` | no | `info@bedrock-it.co.nz` |
+| `CONTACT_FROM` | no | `BedRock IT Website <website@bedrock-it.co.nz>` |
 
-`CONTACT_FROM` must be on a domain verified in Resend. The default sends only to your own
-account address — fine to start, but verify `bedrock-it.co.nz` in Resend and set
-`CONTACT_FROM` to something like `enquiries@bedrock-it.co.nz` so mail is less likely to be
-filtered, and so you can send to other addresses.
+Neither optional variable is set in Vercel, so those defaults are what production uses.
+Change them in `api/contact.ts`, not in the dashboard.
+
+`bedrock-it.co.nz` is verified in Resend — DKIM sits on the root and the Return-Path runs
+through `send.bedrock-it.co.nz` — so `CONTACT_FROM` may be any address on that domain, and
+`website@` needs no mailbox behind it. Enquiries land in the Microsoft 365 mailbox on
+`info@`.
 
 Replies go to the enquirer: the send sets `reply_to` to the address they typed.
 

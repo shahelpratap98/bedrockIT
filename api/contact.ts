@@ -7,14 +7,21 @@
  *                    form falls back to opening the visitor's mail client.
  *   CONTACT_TO       optional. Where enquiries go. Defaults to the address below.
  *   CONTACT_FROM     optional. Must be on a domain verified in Resend. The
- *                    default works for sending to your own account's address.
+ *                    default sends from the verified bedrock-it.co.nz domain.
+ *
+ * Neither optional variable is set in Vercel, so the defaults below are what
+ * production actually uses. Change them here, not in the dashboard.
  */
 export const config = { runtime: 'edge' }
 
 declare const process: { env: Record<string, string | undefined> }
 
-const DEFAULT_TO = 'shahel.pratap98@gmail.com'
-const DEFAULT_FROM = 'BedRock IT <onboarding@resend.dev>'
+const DEFAULT_TO = 'info@bedrock-it.co.nz'
+// A distinct sending address rather than info@ itself: mail addressed from a
+// mailbox to that same mailbox arrives at Microsoft 365 from an outside IP and
+// is the shape its anti-spoofing rules are most suspicious of. website@ needs
+// no mailbox of its own — replies are steered by reply_to below.
+const DEFAULT_FROM = 'BedRock IT Website <website@bedrock-it.co.nz>'
 
 const LIMITS = { name: 120, company: 160, email: 200, phone: 60, service: 80, message: 5000 }
 

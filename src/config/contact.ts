@@ -3,7 +3,7 @@ export const CONTACT = {
   phoneDisplay: '+64 21 0235 5670',
   phoneHref: 'tel:+642102355670',
   whatsappNumber: '642102355670',
-  email: 'shahel.pratap98@gmail.com',
+  email: 'info@bedrock-it.co.nz',
   /** Facebook page id — the same page the Messenger ads point at. */
   messengerPageId: '1353401744516814',
 }

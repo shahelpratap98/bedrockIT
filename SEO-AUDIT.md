@@ -7,7 +7,7 @@ against the live site or the source before being written down.
 
 ## Status — 26 August 2026
 
-Findings 1, 2, 3, 4, 5, 6, 7, 10, 14, 15, 16, 17, 19 and 20 are **fixed and
+Findings 1, 2, 3, 4, 5, 6, 7, 8, 10, 14, 15, 16, 17, 19 and 20 are **fixed and
 verified live**. 12 and 13 are partly done — all four service meta descriptions
 now name New Zealand, and the website page links out to three real client sites
 and the portfolio, but the other three spokes still carry no location context
@@ -19,9 +19,6 @@ external brand presence rather than engineering.
 
 **Still open and blocked on facts only the business can supply:**
 
-- **8 — business email.** Moving off the Gmail needs `hello@bedrock-it.co.nz`
-  to actually exist and receive mail first. Pointing the site at an address
-  that bounces would be worse than the Gmail.
 - **9 — founding narrative.** `/our-story` claims 2019 and "two engineers and a
   van"; the service pages say "our engineers" and "a team". This copy was
   generated during the build and never checked against fact. It needs the real
@@ -127,7 +124,7 @@ animation to below-the-fold content.
 | 5 | **No `og:image` anywhere** | `public/` holds only `media/`; no `og-image.*`, so the build's resolver emits nothing. Live: 0 `og:image` tags. | Add a 1200×630 `public/og-image.jpg`; the build wires it automatically. |
 | 6 | **Price is not in the title tag** | Competitor `digitalcandy.co.nz` ranks for "cheap website nz" with "Websites from $350" — the identical price position — in its title. Yours is in an FAQ six sections down. | Test `Custom Websites From $350 — Website Development NZ`. |
 | 7 | **No proof embedded on service pages** | `/projects` has 7 live client sites but is reachable only from nav/footer. Service pages contain zero `<img>`. | Embed 3–4 project thumbnails above the FAQ. |
-| 8 | **Personal Gmail as the business contact** | `shahel.pratap98@gmail.com` in the footer and in Organization schema on every page. | Move to `hello@bedrock-it.co.nz`. |
+| 8 ✅ | **Personal Gmail as the business contact** | `shahel.pratap98@gmail.com` in the footer and in Organization schema on every page. | Fixed 3 Sep 2026 — now `info@bedrock-it.co.nz`, a real Microsoft 365 mailbox. The contact form delivers there too. |
 | 9 | **Founding narrative is unverified** | `/our-story` opens "2019 — Two engineers and a van"; service copy says "our engineers", "a team". Contact details and both reviews indicate one person. This copy was generated during the build and never checked against fact. | Rewrite to the true story. |
 | 10 | **No security headers** | Only HSTS (without `includeSubDomains`/`preload`). No CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy. `Access-Control-Allow-Origin: *` on HTML. | Add a `headers` block to `vercel.json`. |
 
