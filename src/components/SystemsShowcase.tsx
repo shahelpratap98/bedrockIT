@@ -4,6 +4,11 @@ import { SYSTEMS, type BuiltSystem, type SystemShot } from '../data/systems'
 
 const MEDIA = `${import.meta.env.BASE_URL}media/systems/`
 
+/** Every desktop screenshot ships at 1600 and 800 wide, so phones get the small one. */
+export function screenSrcSet(file: string) {
+  return `${MEDIA}${file.replace('.webp', '-800.webp')} 800w, ${MEDIA}${file} 1600w`
+}
+
 /** A desktop screenshot in a minimal browser window. */
 export function BrowserFrame({ shot, eager = false }: { shot: SystemShot; eager?: boolean }) {
   return (
@@ -15,6 +20,8 @@ export function BrowserFrame({ shot, eager = false }: { shot: SystemShot; eager?
       </div>
       <img
         src={MEDIA + shot.file}
+        srcSet={screenSrcSet(shot.file)}
+        sizes="(min-width: 1024px) 700px, 100vw"
         alt={shot.alt}
         width={1600}
         height={1000}
@@ -71,6 +78,8 @@ function SystemBlock({ system, flip }: { system: BuiltSystem; flip: boolean }) {
               >
                 <img
                   src={MEDIA + shot.file}
+                  srcSet={screenSrcSet(shot.file)}
+                  sizes="(min-width: 1024px) 340px, 50vw"
                   alt={shot.alt}
                   width={1600}
                   height={1000}

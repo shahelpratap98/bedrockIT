@@ -14,6 +14,12 @@ interface WordsPullUpMultiStyleProps {
   style?: React.CSSProperties
   /** Element to render, so headings can be semantic. */
   as?: 'div' | 'h1' | 'h2'
+  /**
+   * Animate with CSS on first paint instead of waiting for hydration. Use
+   * above the fold, where the heading is the largest paint: a framer-motion
+   * start of opacity 0 keeps it invisible until the JavaScript has loaded.
+   */
+  immediate?: boolean
 }
 
 const pullUpVariant = {
@@ -34,6 +40,7 @@ export default function WordsPullUpMultiStyle({
   className = '',
   style,
   as = 'div',
+  immediate = false,
 }: WordsPullUpMultiStyleProps) {
   const Tag = as as React.ElementType
   // Flatten every segment into words while keeping each word's own styling.
@@ -56,15 +63,24 @@ export default function WordsPullUpMultiStyle({
       {words.map(({ word, className: wordClassName, breakAfter }, i) => (
         <Fragment key={`${word}-${i}`}>
           {i > 0 && ' '}
-          <motion.span
-            custom={i}
-            variants={pullUpVariant}
-            initial="initial"
-            animate={isInView ? 'animate' : 'initial'}
-            className={`inline-block ${wordClassName}`}
-          >
-            {word}
-          </motion.span>
+          {immediate ? (
+            <span
+              className={`rise-in inline-block ${wordClassName}`}
+              style={{ animationDelay: `${i * 0.08}s` }}
+            >
+              {word}
+            </span>
+          ) : (
+            <motion.span
+              custom={i}
+              variants={pullUpVariant}
+              initial="initial"
+              animate={isInView ? 'animate' : 'initial'}
+              className={`inline-block ${wordClassName}`}
+            >
+              {word}
+            </motion.span>
+          )}
           {breakAfter && <br />}
         </Fragment>
       ))}

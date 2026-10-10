@@ -7,6 +7,7 @@ import BookCallButton from '../components/BookCallButton'
 import Reviews from '../components/Reviews'
 import { PROJECTS } from '../data/projects'
 import { SYSTEMS } from '../data/systems'
+import { screenSrcSet } from '../components/SystemsShowcase'
 
 const BASE = import.meta.env.BASE_URL
 
@@ -101,6 +102,8 @@ export default function Projects() {
                 >
                   <img
                     src={`${BASE}media/systems/${system.main.file}`}
+                    srcSet={screenSrcSet(system.main.file)}
+                    sizes="(min-width: 768px) 33vw, 100vw"
                     alt={system.main.alt}
                     loading="lazy"
                     width={1600}

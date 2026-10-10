@@ -1,7 +1,4 @@
-import { motion } from 'framer-motion'
 import WordsPullUpMultiStyle, { type TextSegment } from './WordsPullUpMultiStyle'
-
-const EASE = [0.16, 1, 0.3, 1] as const
 
 interface PageHeaderProps {
   label: string
@@ -20,16 +17,17 @@ export default function PageHeader({ label, segments, intro }: PageHeaderProps) 
         className="mx-auto mt-6 max-w-4xl text-3xl leading-[0.95] sm:text-4xl sm:leading-[0.9] md:text-5xl lg:text-6xl xl:text-7xl"
         style={{ color: '#E1E0CC' }}
         segments={segments}
+        immediate
       />
 
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.5, ease: EASE }}
-        className="mx-auto mt-8 max-w-2xl text-xs leading-relaxed text-primary/70 sm:text-sm md:text-base"
+      {/* CSS, not framer-motion: this block is above the fold on every inner
+          page and must not wait for hydration to become visible. */}
+      <p
+        style={{ animationDelay: '0.3s' }}
+        className="rise-in mx-auto mt-8 max-w-2xl text-xs leading-relaxed text-primary/70 sm:text-sm md:text-base"
       >
         {intro}
-      </motion.p>
+      </p>
     </section>
   )
 }
