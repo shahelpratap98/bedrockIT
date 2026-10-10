@@ -2,7 +2,7 @@ import Navbar from '../components/Navbar'
 import PageHeader from '../components/PageHeader'
 import { CONTACT, EMAIL_HREF } from '../config/contact'
 
-const LAST_UPDATED = '21 August 2026'
+const LAST_UPDATED = '11 October 2026'
 
 interface Section {
   title: string
@@ -35,8 +35,8 @@ const SECTIONS: Section[] = [
   {
     title: 'Advertising and analytics',
     paragraphs: [
-      `We use Google’s tag (gtag.js) to measure how the site is used and whether our advertising leads to enquiries. It records page views and fires an event when the contact form is submitted successfully. We do not pass the details you type into the form to Google.`,
-      `We also use Meta's pixel (Facebook and Instagram), which records page views and sets cookies to measure how our advertising performs and to build advertising audiences. When the contact form is submitted successfully it reports that an enquiry happened, without the details you typed.`,
+      `We use Google’s tag (gtag.js) to measure how the site is used and whether our advertising leads to enquiries. It records page views, fires an event when the contact form is submitted successfully, and notes when you tap a WhatsApp, phone, email or Messenger link (which method, not what you send). We do not pass the details you type into the form to Google.`,
+      `We also use Meta's pixel (Facebook and Instagram), which records page views and sets cookies to measure how our advertising performs and to build advertising audiences. When the contact form is submitted successfully it reports that an enquiry happened, without the details you typed, and when you tap a WhatsApp, phone, email or Messenger link it reports which method you chose.`,
       `You can limit this measurement through your browser’s cookie controls, Google’s Ads Settings (adssettings.google.com), and Meta’s Ad Preferences.`,
     ],
   },

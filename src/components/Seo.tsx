@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { SITE, canonicalFor, seoFor } from '../config/seo'
-import { GOOGLE_TAG_ID, trackMetaPageView } from '../config/analytics'
+import { GOOGLE_TAG_ID, contactMethodOf, trackContactClick, trackMetaPageView } from '../config/analytics'
 
 function upsertMeta(attr: 'name' | 'property', key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`)
@@ -76,6 +76,18 @@ export default function Seo() {
       trackMetaPageView()
     }
   }, [pathname])
+
+  // One listener for every WhatsApp, phone, email and Messenger link on the
+  // site, so a new button can never forget to report itself.
+  useEffect(() => {
+    const onClick = (event: MouseEvent) => {
+      const link = (event.target as Element | null)?.closest?.('a[href]')
+      const method = link ? contactMethodOf(link.getAttribute('href') ?? '') : null
+      if (method) trackContactClick(method)
+    }
+    document.addEventListener('click', onClick, { capture: true })
+    return () => document.removeEventListener('click', onClick, { capture: true })
+  }, [])
 
   return null
 }

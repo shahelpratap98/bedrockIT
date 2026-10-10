@@ -12,6 +12,21 @@ import { PROJECTS } from '../data/projects'
 
 const BASE = import.meta.env.BASE_URL
 
+/**
+ * The enquiry form, with this service preselected. The form is where the
+ * Google Ads conversion fires; a WhatsApp chat on its own records nothing.
+ */
+function QuoteLink({ slug }: { slug: string }) {
+  return (
+    <Link
+      to={`/contact?service=${slug}`}
+      className="inline-flex items-center gap-2 rounded-full border border-primary/40 px-5 py-3 text-sm text-primary transition-colors hover:border-primary hover:bg-primary/10"
+    >
+      Get a fixed quote
+    </Link>
+  )
+}
+
 /** Shared layout for every service spoke, driven by src/data/services.ts. */
 export default function ServicePage({ service }: { service: Service }) {
   const others = SERVICES.filter((other) => other.slug !== service.slug)
@@ -42,7 +57,10 @@ export default function ServicePage({ service }: { service: Service }) {
         spokes.
       */}
       <div className="-mt-10 flex flex-col items-center gap-6 pb-14">
-        <BookCallButton />
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <BookCallButton />
+          <QuoteLink slug={service.slug} />
+        </div>
         <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500">
           Last updated {service.lastUpdated}
         </p>
@@ -116,7 +134,10 @@ export default function ServicePage({ service }: { service: Service }) {
               </li>
             ))}
           </ul>
-          <BookCallButton className="mt-10" label="Talk it through" />
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <BookCallButton label="Talk it through" />
+            <QuoteLink slug={service.slug} />
+          </div>
         </div>
       </section>
 

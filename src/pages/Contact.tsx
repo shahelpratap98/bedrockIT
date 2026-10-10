@@ -1,10 +1,11 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { ArrowRight } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
 import { CONTACT, EMAIL_HREF, MESSENGER_URL, WHATSAPP_URL } from '../config/contact'
 import { trackEnquiryConversion } from '../config/analytics'
+import { SERVICES as SERVICE_PAGES } from '../data/services'
 
 const CONTACT_EMAIL = CONTACT.email
 
@@ -17,13 +18,8 @@ const DETAILS = [
   { label: 'Messenger', value: 'Message us on Facebook', href: MESSENGER_URL, external: true },
 ]
 
-const SERVICES = [
-  'Website development',
-  'Managed IT support',
-  'Cyber security',
-  'Cloud and migration',
-  'Something else',
-]
+// Same names as the service pages, so /contact?service=<slug> can preselect one.
+const SERVICES = [...SERVICE_PAGES.map((service) => service.name), 'Something else']
 
 const inputClass =
   'w-full rounded-lg border border-white/10 bg-black/40 px-4 py-3 text-xs text-[#E1E0CC] outline-none transition-colors placeholder:text-gray-500 focus:border-primary/50 sm:text-sm'
@@ -48,6 +44,16 @@ function openMailClient(fields: Record<string, string>) {
 export default function Contact() {
   const [status, setStatus] = useState<Status>('idle')
   const [usedMailClient, setUsedMailClient] = useState(false)
+  const serviceRef = useRef<HTMLSelectElement>(null)
+
+  // /contact?service=business-systems preselects that service. Done after
+  // mount rather than through defaultValue, so the prerendered HTML (which
+  // cannot know the query string) still matches what React hydrates.
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get('service')
+    const match = SERVICE_PAGES.find((service) => service.slug === slug)
+    if (match && serviceRef.current) serviceRef.current.value = match.name
+  }, [])
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -216,7 +222,7 @@ export default function Contact() {
                     <span className="text-[10px] uppercase tracking-[0.2em] text-primary">
                       What do you need?
                     </span>
-                    <select name="service" className={inputClass} defaultValue={SERVICES[0]}>
+                    <select ref={serviceRef} name="service" className={inputClass} defaultValue={SERVICES[0]}>
                       {SERVICES.map((service) => (
                         <option key={service} value={service} className="bg-[#101010]">
                           {service}

@@ -25,6 +25,27 @@ export function trackEnquiryConversion() {
 }
 
 /**
+ * Report a click on a WhatsApp, phone, email or Messenger link. This is an
+ * intent signal, not a completed enquiry, so it is a plain event: it only
+ * counts in Google Ads once a conversion action is created for
+ * `contact_click`, and that action should be secondary so bidding still
+ * optimises for real form enquiries.
+ */
+export function trackContactClick(method: 'whatsapp' | 'phone' | 'email' | 'messenger') {
+  window.gtag?.('event', 'contact_click', { method })
+  window.fbq?.('track', 'Contact', { method })
+}
+
+/** Which contact method a link opens, if any. */
+export function contactMethodOf(href: string) {
+  if (href.startsWith('https://wa.me/')) return 'whatsapp' as const
+  if (href.startsWith('tel:')) return 'phone' as const
+  if (href.startsWith('mailto:')) return 'email' as const
+  if (href.startsWith('https://m.me/')) return 'messenger' as const
+  return null
+}
+
+/**
  * The pixel's base code only fires PageView on full page loads; client-side
  * route changes must report themselves. (gtag has its own equivalent in Seo.)
  */
