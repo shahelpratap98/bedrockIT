@@ -5,6 +5,7 @@ import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
 import { CONTACT, EMAIL_HREF, MESSENGER_URL, WHATSAPP_URL } from '../config/contact'
 import { trackEnquiryConversion } from '../config/analytics'
+import { getAttribution } from '../config/attribution'
 import { SERVICES as SERVICE_PAGES } from '../data/services'
 
 const CONTACT_EMAIL = CONTACT.email
@@ -71,7 +72,7 @@ export default function Contact() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(fields),
+        body: JSON.stringify({ ...fields, ...getAttribution() }),
       })
 
       if (res.ok) {

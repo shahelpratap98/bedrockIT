@@ -21,7 +21,7 @@ const SECTIONS: Section[] = [
     title: 'What we collect',
     paragraphs: [`We collect personal information in three ways:`],
     bullets: [
-      'Contact form — when you send an enquiry we receive the details you type: your name, company, email address, phone number, team size and message.',
+      'Contact form — when you send an enquiry we receive the details you type: your name, company, email address, phone number, the service you are interested in and your message. We also note which page of this site you arrived on, and if you came through one of our ads or a tagged link, the campaign name and the click reference Google or Meta added to the link. That tells us which advertising brought you, not who you are.',
       'Direct contact — if you phone, email or message us on WhatsApp or Messenger, we receive whatever you choose to share, handled under that platform’s own terms.',
       'Technical data — like most websites, our hosting provider records standard server logs (IP address, browser type, pages requested) and our advertising tags set cookies and similar identifiers, described below.',
     ],
@@ -29,7 +29,7 @@ const SECTIONS: Section[] = [
   {
     title: 'How we use it',
     paragraphs: [
-      `Enquiry details are used to respond to you and, if we end up working together, to set up your account and agreement. We do not sell personal information, and we do not add you to a mailing list because you asked us a question.`,
+      `Enquiry details are used to respond to you and, if we end up working together, to set up your account and agreement. We keep enquiries, and the emails we exchange about them, in our own customer records system so we can follow up and see which of our advertising brings in work. We do not sell personal information, and we do not add you to a mailing list because you asked us a question.`,
     ],
   },
   {
@@ -48,6 +48,8 @@ const SECTIONS: Section[] = [
     bullets: [
       'Vercel — hosts the website and processes standard server logs.',
       'Resend — delivers contact form enquiries to our inbox as email.',
+      'Microsoft 365 — our email, where enquiries arrive.',
+      'Supabase — hosts our customer records system, in Sydney, Australia.',
       'Google — advertising measurement, as described above.',
       'Meta — advertising measurement, as described above.',
     ],
@@ -55,7 +57,7 @@ const SECTIONS: Section[] = [
   {
     title: 'How long we keep it',
     paragraphs: [
-      `Enquiries stay in our email for as long as they are useful for responding to you and keeping a record of our correspondence. If you would like an enquiry deleted, ask and we will remove it.`,
+      `Enquiries stay in our email and customer records for as long as they are useful for responding to you and keeping a record of our correspondence. If you would like an enquiry deleted, ask and we will remove it.`,
     ],
   },
   {

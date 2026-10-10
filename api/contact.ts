@@ -23,7 +23,26 @@ const DEFAULT_TO = 'info@bedrock-it.co.nz'
 // no mailbox of its own — replies are steered by reply_to below.
 const DEFAULT_FROM = 'BedRock IT Website <website@bedrock-it.co.nz>'
 
-const LIMITS = { name: 120, company: 160, email: 200, phone: 60, service: 80, message: 5000 }
+const LIMITS = { name: 120, company: 160, email: 200, phone: 60, service: 80, message: 5000, tag: 300 }
+
+// Where the visitor came from (src/config/attribution.ts). Optional.
+const ATTRIBUTION = [
+  ['utm_source', 'Came from'],
+  ['utm_medium', 'Medium'],
+  ['utm_campaign', 'Campaign'],
+  ['utm_term', 'Keyword'],
+  ['landing_page', 'Landing page'],
+  ['referrer', 'Referrer'],
+  ['gclid', 'Google click ID'],
+  ['fbclid', 'Meta click ID'],
+] as const
+
+/** UTF-8 safe base64, for a header that may carry a macron or an emoji. */
+function base64(text: string) {
+  let binary = ''
+  for (const byte of new TextEncoder().encode(text)) binary += String.fromCharCode(byte)
+  return btoa(binary)
+}
 
 interface Payload {
   name?: string
@@ -36,6 +55,14 @@ interface Payload {
   message?: string
   /** Honeypot — real people never see this field, so anything in it is a bot. */
   website?: string
+  utm_source?: string
+  utm_medium?: string
+  utm_campaign?: string
+  utm_term?: string
+  landing_page?: string
+  referrer?: string
+  gclid?: string
+  fbclid?: string
 }
 
 function json(body: unknown, status: number) {
@@ -100,13 +127,22 @@ export default async function handler(req: Request): Promise<Response> {
     return json({ error: 'not_configured' }, 501)
   }
 
+  const source = Object.fromEntries(
+    ATTRIBUTION.map(([key]) => [key, clean(payload[key], LIMITS.tag)]).filter(([, value]) => value),
+  ) as Record<string, string>
+
   const rows: Array<[string, string]> = [
     ['Name', name],
     ['Company', company || '—'],
     ['Email', email],
     ['Phone', phone || '—'],
     ['Service', service || '—'],
+    ...ATTRIBUTION.filter(([key]) => source[key]).map(([key, label]): [string, string] => [label, source[key]]),
   ]
+
+  // The CRM reads this rather than parsing the email body, which Outlook may
+  // reflow. The message itself stays in the body.
+  const leadHeader = base64(JSON.stringify({ v: 1, name, company, email, phone, service, ...source }))
 
   const text = [...rows.map(([k, v]) => `${k}: ${v}`), '', message].join('\n')
   const html = [
@@ -133,6 +169,7 @@ export default async function handler(req: Request): Promise<Response> {
       // So hitting reply in your inbox replies to the enquirer, not to Resend.
       reply_to: email,
       subject: `Website enquiry — ${name}${company ? ` (${company})` : ''}`,
+      headers: { 'X-BedRock-Lead': leadHeader },
       text,
       html,
     }),
