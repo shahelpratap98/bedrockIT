@@ -50,7 +50,7 @@ export default function Services() {
         intro="Most clients take the lot. Some start with one piece and add the rest once they trust us. Either way, the scope is written down and the price is fixed before any work begins."
       />
 
-      {/* The four main services, each with its own page */}
+      {/* The main services, each with its own page */}
       <section className="px-4 pb-20 sm:px-6 md:pb-24">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-3 md:grid-cols-2 md:gap-1">
           {SERVICES.map((service, i) => {

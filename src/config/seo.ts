@@ -51,9 +51,9 @@ const SERVICE_SEO: RouteSeo[] = SERVICES.map((service) => ({
 export const ROUTE_SEO: RouteSeo[] = [
   {
     path: '/',
-    title: 'BedRock IT — Managed IT, Cloud and Websites',
+    title: 'BedRock IT — Managed IT, Websites and Business Systems',
     description:
-      'Managed IT support, cloud migration, cyber security and SEO optimised websites for businesses that cannot afford downtime. One team that answers the phone.',
+      'Managed IT support, cyber security, SEO optimised websites and custom business systems for NZ businesses that cannot afford downtime. One team that answers.',
   },
   {
     path: '/our-story',
@@ -65,14 +65,14 @@ export const ROUTE_SEO: RouteSeo[] = [
     path: '/services',
     title: 'IT Services — BedRock IT',
     description:
-      'Managed IT support, cloud migration, cyber security, website development, networks and project rollouts — scoped and priced before any work begins.',
+      'Managed IT support, cloud migration, cyber security, website development and custom business systems, scoped and priced before any work begins.',
   },
   ...SERVICE_SEO,
   {
     path: '/projects',
-    title: 'Our Projects — Websites We Have Built | BedRock IT',
+    title: 'Our Projects — Websites and Business Systems | BedRock IT',
     description:
-      'Real business websites designed, built and hosted by BedRock IT — commercial HVAC, structural engineering and immigration advice. Every one live today.',
+      'Business websites and custom staff systems built by BedRock IT: bookings and dispatch, timesheets and invoicing, case management, and sites live today.',
   },
   {
     path: '/support',

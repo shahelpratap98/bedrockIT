@@ -36,6 +36,8 @@ export interface Service {
    * not evidence of a cloud migration.
    */
   relatedProjects?: string[]
+  /** Show the business systems screenshots (src/data/systems.ts) on this page. */
+  showcase?: boolean
   includes: ServiceSection[]
   process?: ProcessStep[]
   outcomes: string[]
@@ -148,6 +150,114 @@ export const SERVICES: Service[] = [
         question: 'What happens if we stop working with you?',
         answer:
           'You keep the site, the domain, the DNS and the documentation. We do not hold registrar access or source code hostage as a retention strategy.',
+      },
+    ],
+  },
+  {
+    slug: 'business-systems',
+    lastUpdated: '11 October 2026',
+    name: 'Business systems',
+    label: 'Custom business systems',
+    headline: [
+      { text: 'Your spreadsheet has done its job.', className: 'font-normal' },
+      { text: 'Time for a system.', className: 'italic font-serif' },
+    ],
+    intro:
+      'When the business runs on a shared spreadsheet, a group chat and one person’s memory, jobs, hours and invoices slip through the gaps. We build web systems around the way your team already works: bookings and dispatch, timesheets and invoicing, case and document tracking. Your staff use them on a phone, and you see the whole business on one screen.',
+    summary: 'Booking, timesheet, invoicing and case systems built around how your team works.',
+    seoTitle: 'Custom Business Systems & Staff Portals NZ | BedRock IT',
+    seoDescription:
+      'Custom web systems for NZ businesses: bookings and dispatch, timesheets, invoicing, leave and case management. Built around how you work, fixed quote first.',
+    showcase: true,
+    includes: [
+      {
+        title: 'Built from the spreadsheet you use today',
+        body: 'We start from your actual workbook: its columns, its formulas and the workarounds people rely on. Your existing data is imported on day one, so nobody retypes history and nothing familiar disappears.',
+      },
+      {
+        title: 'Everyone sees only what they should',
+        body: 'Drivers see their own jobs, staff see their own time, owners see the money. Permissions are enforced by the database itself, not just hidden on the screen, so a curious login cannot reach what it should not.',
+      },
+      {
+        title: 'Made for the phone in the van or on site',
+        body: 'A bottom menu, big buttons and a home-screen icon that opens like an app. Built for the person in the field as much as the person in the office, with a short in-app guide for each role.',
+      },
+      {
+        title: 'Invoices and exports your accountant will accept',
+        body: 'GST invoices built from approved work, PDF downloads, and Excel exports of anything on screen. Billable time stops leaking between the timesheet and the invoice.',
+      },
+      {
+        title: 'Hosted in Australia, backed up and restore-tested',
+        body: 'Systems run on Vercel and a Postgres database in Sydney. Backups are set up and tested by actually restoring them, rather than assumed to work.',
+      },
+      {
+        title: 'Your data stays yours',
+        body: 'Export everything at any time. Where it suits, the database sits in an account your business owns, so you are never locked in to us to get your own records back.',
+      },
+    ],
+    process: [
+      {
+        number: '01',
+        title: 'Walk-through',
+        body: 'We sit with the people who use the spreadsheet and watch how the work actually moves: who enters what, who checks it, where it goes wrong. That is the brief, not a feature wish-list.',
+      },
+      {
+        number: '02',
+        title: 'Fixed quote',
+        body: 'You get the screens, the roles and what is in the first version, with the price fixed in writing before anything is built.',
+      },
+      {
+        number: '03',
+        title: 'Build on your real data',
+        body: 'A working first version, loaded with your own imported data, usually within a week or two. You test it on real jobs while we adjust.',
+      },
+      {
+        number: '04',
+        title: 'Go live and support',
+        body: 'We set up the team’s logins, run a short walk-through, and stay on call. Changes after launch are quoted before we start them.',
+      },
+    ],
+    outcomes: [
+      'One place for the work, instead of a spreadsheet, a group chat and memory',
+      'Invoices built from approved work, so billable hours stop slipping through',
+      'Staff and drivers use it on their phones without a training day',
+      'The week, the money and what is outstanding, visible at a glance',
+    ],
+    faqs: [
+      {
+        question: 'How much does a custom business system cost?',
+        answer:
+          'It depends on how many roles, screens and documents are involved, so we price it after a walk-through of how you work today, and fix that price in writing before building anything. As a guide, a focused system for one team is usually a few thousand dollars to build, plus a small monthly fee for hosting, backups and support.',
+      },
+      {
+        question: 'Why not just use off-the-shelf software?',
+        answer:
+          'If an off-the-shelf tool genuinely fits, we will tell you to use it. Custom makes sense when you are paying per user, per month, for software that only half fits, or when the way you run jobs is part of what makes you better than competitors and you do not want to bend it to suit someone else’s product.',
+      },
+      {
+        question: 'Can it import our existing spreadsheet?',
+        answer:
+          'Yes, and it should. We have imported a year of bookings from one-tab-per-month workbooks and rebuilt project lists from timesheet files. Importing your history on day one is what makes the switch painless, because the new system already knows your customers and jobs.',
+      },
+      {
+        question: 'Does it work on phones?',
+        answer:
+          'Yes. Every system we build is designed for phones first: a bottom menu, large tap targets, and a home-screen icon so it opens like an app. Office screens such as dispatch boards and invoicing are laid out for a desktop as well.',
+      },
+      {
+        question: 'Where is our data stored, and who owns it?',
+        answer:
+          'In a Postgres database in Sydney, with the application on Vercel. You own the data and can export it at any time. Where it makes sense, for example with sensitive client records, the database sits in an account your business owns outright.',
+      },
+      {
+        question: 'Can you build something other than bookings, timesheets or cases?',
+        answer:
+          'Yes. The pattern is the same for anything currently living in a spreadsheet and a group chat: job tracking, quoting, rosters, inspections, client portals, lead tracking. If your team copies information from one place to another every day, that is usually where a system pays for itself.',
+      },
+      {
+        question: 'What happens if something breaks or we need a change?',
+        answer:
+          'You contact us directly and speak to the person who built it, not a ticket queue. Changes are quoted before we start them, so there are no surprise invoices.',
       },
     ],
   },

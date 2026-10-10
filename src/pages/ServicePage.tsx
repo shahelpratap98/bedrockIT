@@ -6,6 +6,7 @@ import Reveal from '../components/Reveal'
 import Faqs from '../components/Faqs'
 import JsonLd from '../components/JsonLd'
 import BookCallButton from '../components/BookCallButton'
+import SystemsShowcase from '../components/SystemsShowcase'
 import { SERVICES, type Service } from '../data/services'
 import { PROJECTS } from '../data/projects'
 
@@ -46,6 +47,9 @@ export default function ServicePage({ service }: { service: Service }) {
           Last updated {service.lastUpdated}
         </p>
       </div>
+
+      {/* Screens first: for a system, seeing it is the argument. */}
+      {service.showcase && <SystemsShowcase />}
 
       {/* What's included */}
       <section className="px-4 pb-20 sm:px-6 md:pb-24">
@@ -179,7 +183,7 @@ export default function ServicePage({ service }: { service: Service }) {
           <h2 className="text-center text-xl sm:text-2xl" style={{ color: '#E1E0CC' }}>
             Other things we do
           </h2>
-          <div className="mt-8 grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-1">
+          <div className="mt-8 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-1 lg:grid-cols-4">
             {others.map((other, i) => (
               <Reveal key={other.slug} index={i} className="h-full">
                 <Link

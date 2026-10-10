@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ArrowUpRight, Check } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import PageHeader from '../components/PageHeader'
@@ -5,6 +6,7 @@ import Reveal from '../components/Reveal'
 import BookCallButton from '../components/BookCallButton'
 import Reviews from '../components/Reviews'
 import { PROJECTS } from '../data/projects'
+import { SYSTEMS } from '../data/systems'
 
 const BASE = import.meta.env.BASE_URL
 
@@ -76,6 +78,49 @@ export default function Projects() {
               </a>
             </Reveal>
           ))}
+        </div>
+      </section>
+
+      {/* Internal systems can't be clicked through to, so these link to the
+          screens on the service page instead of to a live URL. */}
+      <section className="px-4 pb-20 sm:px-6 md:pb-28">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="text-center text-xl sm:text-2xl md:text-3xl" style={{ color: '#E1E0CC' }}>
+            Business systems we have built
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-center text-xs leading-relaxed text-gray-400 sm:text-sm">
+            Staff-only tools that replaced a spreadsheet. They sit behind a login, so the screens are
+            shown with invented sample data instead.
+          </p>
+          <div className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-1">
+            {SYSTEMS.map((system, i) => (
+              <Reveal key={system.id} index={i} className="h-full">
+                <Link
+                  to={`/services/business-systems#${system.id}`}
+                  className="group flex h-full flex-col overflow-hidden rounded-2xl bg-[#212121] transition-colors hover:bg-[#262626]"
+                >
+                  <img
+                    src={`${BASE}media/systems/${system.main.file}`}
+                    alt={system.main.alt}
+                    loading="lazy"
+                    width={1600}
+                    height={1000}
+                    className="h-44 w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
+                  />
+                  <div className="flex flex-1 flex-col p-5">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-primary">{system.builtFor}</p>
+                    <h3 className="mt-3 text-base sm:text-lg" style={{ color: '#E1E0CC' }}>
+                      {system.name}
+                    </h3>
+                    <span className="mt-auto flex items-center gap-1.5 pt-5 text-xs text-primary">
+                      See the screens
+                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </span>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 

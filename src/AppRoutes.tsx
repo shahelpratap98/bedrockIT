@@ -18,13 +18,16 @@ import { SERVICES } from './data/services'
 const useBeforePaint = typeof window === 'undefined' ? useEffect : useLayoutEffect
 
 function ScrollToTop() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   // Runs before the browser paints, so a new route can never be shown at the
   // previous page's scroll offset — which looks like a blank screen when the
-  // old offset lands past the end of the new page's content.
+  // old offset lands past the end of the new page's content. A #fragment
+  // (e.g. /services/business-systems#cases) goes to that section instead.
   useBeforePaint(() => {
-    window.scrollTo(0, 0)
-  }, [pathname])
+    const target = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : null
+    if (target) target.scrollIntoView()
+    else window.scrollTo(0, 0)
+  }, [pathname, hash])
   return null
 }
 
