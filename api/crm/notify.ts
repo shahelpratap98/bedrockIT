@@ -7,7 +7,7 @@
  * reads the mailbox itself.
  */
 import { waitUntil } from '@vercel/functions'
-import { crmConfigured, runSync } from '../_lib/crm'
+import { crmConfigured, runSync } from '../_lib/crm.js'
 
 declare const process: { env: Record<string, string | undefined> }
 
