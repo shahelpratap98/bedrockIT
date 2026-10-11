@@ -24,6 +24,10 @@ declare const process: { env: Record<string, string | undefined> }
 
 const env = (key: string) => process.env[key] ?? ''
 
+// Production was set up with this name missing its final letter (Vercel will
+// not rename a secret without re-entering it). Either spelling works.
+const serviceKey = () => env('SUPABASE_SERVICE_ROLE_KEY') || env('SUPABASE_SERVICE_ROLE_KE')
+
 // Overridable for local testing against fakes; never set in production.
 const GRAPH = env('GRAPH_BASE') || 'https://graph.microsoft.com/v1.0'
 const LOGIN = env('MS_LOGIN_BASE') || 'https://login.microsoftonline.com'
@@ -38,7 +42,8 @@ const RENEW_WITHIN_MS = 30 * 3600_000
 
 export function crmConfigured() {
   const missing = ['MS_TENANT_ID', 'MS_CLIENT_ID', 'MS_CLIENT_SECRET', 'CRM_MAILBOX', 'GRAPH_CLIENT_STATE',
-    'SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'].filter((key) => !env(key))
+    'SUPABASE_URL'].filter((key) => !env(key))
+  if (!serviceKey()) missing.push('SUPABASE_SERVICE_ROLE_KEY')
   return { ok: missing.length === 0, missing }
 }
 
@@ -51,7 +56,7 @@ export function json(body: unknown, status = 200) {
 // ---------------------------------------------------------------------------
 
 async function db(path: string, init: RequestInit = {}) {
-  const key = env('SUPABASE_SERVICE_ROLE_KEY')
+  const key = serviceKey()
   const res = await fetch(`${env('SUPABASE_URL')}/rest/v1/${path}`, {
     ...init,
     headers: { apikey: key, authorization: `Bearer ${key}`, 'content-type': 'application/json', ...(init.headers ?? {}) },
@@ -76,7 +81,7 @@ const setState = (patch: Record<string, unknown>) =>
 export async function isMember(accessToken: string) {
   if (!accessToken) return false
   const res = await fetch(`${env('SUPABASE_URL')}/auth/v1/user`, {
-    headers: { apikey: env('SUPABASE_SERVICE_ROLE_KEY'), authorization: `Bearer ${accessToken}` },
+    headers: { apikey: serviceKey(), authorization: `Bearer ${accessToken}` },
   })
   if (!res.ok) return false
   const user = (await res.json()) as { id?: string }
