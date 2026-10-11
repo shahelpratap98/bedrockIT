@@ -92,3 +92,11 @@ export interface TriageRow {
   last_subject: string | null
   last_preview: string | null
 }
+
+export interface Payment {
+  id: string
+  lead_id: string
+  amount: number
+  paid_on: string
+  note: string
+}

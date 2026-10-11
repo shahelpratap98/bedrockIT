@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { supabase } from '../supabase'
 import { useAuth } from '../auth'
-import { SOURCE_LABEL, STAGES, STAGE_LABEL, type Activity, type LeadRow, type Message, type Source, type Stage } from '../types'
-import { dateTime, money } from '../format'
+import { SOURCE_LABEL, STAGES, STAGE_LABEL, type Activity, type LeadRow, type Message, type Payment, type Source, type Stage } from '../types'
+import { date, dateTime, money, todayNZ } from '../format'
 import { Empty, ErrorNote, Loading, SourceChip, StageBadge, friendly } from '../ui'
 
 const STAGE_BUTTON: Record<Stage, string> = {
@@ -22,6 +22,7 @@ export default function LeadDetail() {
   const [lead, setLead] = useState<LeadRow | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [activities, setActivities] = useState<Activity[]>([])
+  const [payments, setPayments] = useState<Payment[]>([])
   const [error, setError] = useState<string | null>(null)
   const [saved, setSaved] = useState<string | null>(null)
   const [missing, setMissing] = useState(false)
@@ -32,12 +33,14 @@ export default function LeadDetail() {
     if (!data) return setMissing(true)
     const row = data as LeadRow
     setLead(row)
-    const [m, a] = await Promise.all([
+    const [m, a, p] = await Promise.all([
       supabase.from('messages').select('*').eq('contact_id', row.contact_id).order('received_at', { ascending: false }),
       supabase.from('activities').select('*, author:profiles(display_name)').eq('lead_id', id).order('at', { ascending: false }),
+      supabase.from('payments').select('id, lead_id, amount, paid_on, note').eq('lead_id', id).order('paid_on', { ascending: false }),
     ])
     setMessages((m.data as Message[]) ?? [])
     setActivities((a.data as Activity[]) ?? [])
+    setPayments((p.data as Payment[]) ?? [])
   }, [id])
 
   useEffect(() => { void load() }, [load])
@@ -92,6 +95,29 @@ export default function LeadDetail() {
     const { error } = await supabase.from('activities').insert({ lead_id: id, kind, body, created_by: session.user.id })
     if (error) return setError(friendly(error))
     form.reset()
+    await load()
+  }
+
+  async function recordPayment(amount: number, paidOn: string, note: string) {
+    if (!session || !(amount > 0)) return
+    setError(null)
+    const { error } = await supabase.from('payments').insert({ lead_id: id, amount, paid_on: paidOn, note, created_by: session.user.id })
+    if (error) return setError(friendly(error))
+    flash('Payment recorded')
+    await load()
+  }
+
+  async function addPayment(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const form = event.currentTarget
+    const f = new FormData(form)
+    await recordPayment(Number(f.get('amount')), String(f.get('paid_on') || todayNZ()), String(f.get('note') ?? '').trim())
+    form.reset()
+  }
+
+  async function removePayment(paymentId: string) {
+    const { error } = await supabase.from('payments').delete().eq('id', paymentId)
+    if (error) return setError(friendly(error))
     await load()
   }
 
@@ -215,6 +241,50 @@ export default function LeadDetail() {
             )}
             <button className="btn-primary w-full">Save</button>
           </form>
+
+          {(() => {
+            const paid = payments.reduce((t, p) => t + Number(p.amount), 0)
+            const owed = Math.max(Number(lead.value ?? 0) - paid, 0)
+            return (
+              <section className="card space-y-3 p-5">
+                <div className="flex items-baseline justify-between">
+                  <h2 className="text-sm font-semibold">Payments</h2>
+                  <p className="text-xs text-stone-500">
+                    {money(paid, true)} paid{lead.value ? ` of ${money(lead.value, true)}` : ''}
+                  </p>
+                </div>
+                {lead.value && owed > 0.005 ? (
+                  <div className="flex items-center justify-between gap-2 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                    <span>{money(owed, true)} still owed</span>
+                    <button className="btn-ghost px-2.5 py-1 text-xs" onClick={() => recordPayment(owed, todayNZ(), 'Paid in full')}>
+                      Mark fully paid
+                    </button>
+                  </div>
+                ) : lead.value && paid > 0 ? (
+                  <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-800">Paid in full</p>
+                ) : null}
+                {payments.length > 0 && (
+                  <ul className="divide-y divide-stone-100 text-sm">
+                    {payments.map((p) => (
+                      <li key={p.id} className="flex items-center justify-between gap-2 py-1.5">
+                        <span>
+                          <span className="tabular-nums">{money(p.amount, true)}</span>
+                          <span className="text-stone-500"> · {date(p.paid_on)}{p.note ? ` · ${p.note}` : ''}</span>
+                        </span>
+                        <button className="text-xs text-stone-400 hover:text-red-700" onClick={() => removePayment(p.id)} aria-label="Remove payment">Remove</button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <form onSubmit={addPayment} className="grid grid-cols-2 gap-2">
+                  <input name="amount" type="number" min="0.01" step="0.01" required className="input" placeholder="Amount ($)" aria-label="Amount" />
+                  <input name="paid_on" type="date" className="input" defaultValue={todayNZ()} aria-label="Date paid" />
+                  <input name="note" className="input col-span-2" placeholder="Note, e.g. deposit or invoice number" aria-label="Note" />
+                  <button className="btn-ghost col-span-2">Record a payment</button>
+                </form>
+              </section>
+            )
+          })()}
 
           <form onSubmit={saveContact} className="card space-y-3 p-5" key={`c-${lead.contact_id}`}>
             <h2 className="text-sm font-semibold">Contact</h2>

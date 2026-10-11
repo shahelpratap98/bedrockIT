@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase'
-import { OPEN_STAGES, STAGE_LABEL, type LeadRow, type Stage } from '../types'
+import { OPEN_STAGES, STAGE_LABEL, type LeadRow, type Payment, type Stage } from '../types'
+import Money from '../Money'
 import { ago, date, isOverdue, money, todayNZ } from '../format'
 import { Empty, ErrorNote, Loading, PageTitle, SourceChip, StageBadge, friendly } from '../ui'
 
@@ -15,6 +16,7 @@ const FILTERS: { key: Filter; label: string }[] = [
 export default function Leads() {
   const navigate = useNavigate()
   const [rows, setRows] = useState<LeadRow[] | null>(null)
+  const [payments, setPayments] = useState<Payment[]>([])
   const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<Filter>('open')
   const [search, setSearch] = useState('')
@@ -24,6 +26,7 @@ export default function Leads() {
       if (error) setError(friendly(error))
       setRows((data as LeadRow[]) ?? [])
     })
+    supabase.from('payments').select('id, lead_id, amount, paid_on, note').then(({ data }) => setPayments((data as Payment[]) ?? []))
   }, [])
 
   const visible = useMemo(() => {
@@ -58,6 +61,8 @@ export default function Leads() {
         actions={<Link to="/leads/new" className="btn-primary">Add lead</Link>}
       />
       <ErrorNote error={error} />
+
+      <Money rows={rows} payments={payments} />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {pipeline.stages.map(({ stage, count, value }) => (

@@ -18,7 +18,7 @@ await db.exec(`
   grant execute on function auth.uid() to authenticated, anon, service_role;
   grant usage on schema public to authenticated, anon, service_role;
 `);
-for (const f of ["20261011000100_crm.sql", "20261011000200_contact_email_optional.sql"]) {
+for (const f of ["20261011000100_crm.sql", "20261011000200_contact_email_optional.sql", "20261011000300_payments.sql"]) {
   await db.exec(readFileSync(fileURLToPath(new URL("../migrations/" + f, import.meta.url)), "utf8"));
 }
 await db.exec(`grant all on all tables in schema public to service_role; grant usage on schema app to service_role;
@@ -111,6 +111,16 @@ ok(blocked, "members cannot forge system or stage entries");
 blocked = false;
 try { await db.transaction(async (tx) => { await tx.exec(`set local role anon`); await tx.query(`select * from public.leads`); }); } catch { blocked = true; }
 ok(blocked, "anonymous visitors have no access at all");
+
+console.log("\npayments");
+await as(SHAHEL, (x) => x(`insert into public.payments (lead_id, amount, paid_on, note, created_by) values ($1, 1166.67, '2026-10-09', 'deposit', $2)`, [newLead[0].id, SHAHEL]));
+const paid = await as(SHAHEL, (x) => x(`select coalesce(sum(amount), 0)::numeric as t from public.payments where lead_id = $1`, [newLead[0].id]));
+ok(Number(paid[0].t) === 1166.67, "member records a part payment");
+ok((await q(`select body from public.activities where body like 'Payment received%'`))[0]?.body === "Payment received: $1,166.67 on 09 Oct 2026 (deposit)", "payment shows in the lead history");
+ok((await as(STRANGER, (x) => x(`select * from public.payments`))).length === 0, "inactive account sees no payments");
+blocked = false;
+try { await as(SHAHEL, (x) => x(`insert into public.payments (lead_id, amount) values ($1, -5)`, [newLead[0].id])); } catch { blocked = true; }
+ok(blocked, "a negative payment is rejected");
 
 console.log("\nphone-only contacts");
 await db.exec(`insert into public.contacts (name, phone, status) values ('Phone Only', '021 555 0000', 'active')`);
