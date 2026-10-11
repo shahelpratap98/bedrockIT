@@ -118,6 +118,11 @@ export default function Footer() {
           <Link to="/privacy" className="transition-colors hover:text-primary">
             Privacy policy
           </Link>
+          {/* A full page load on purpose: /portal is a separate app (portal.html)
+              that never loads the site's ad and analytics tags. */}
+          <a href="/portal" rel="nofollow" className="transition-colors hover:text-primary">
+            Staff login
+          </a>
         </p>
       </div>
     </footer>
