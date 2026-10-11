@@ -2,9 +2,14 @@
 export const GOOGLE_TAG_ID = 'AW-18359431812'
 export const META_PIXEL_ID = '1340904901132804'
 
-/** Conversion event names as defined in Google Ads. */
+/**
+ * Google Ads conversion actions (send_to = tag ID / conversion label).
+ * enquiry is the primary action bidding optimises for; contactClick is
+ * secondary, reported but not bid on.
+ */
 export const CONVERSIONS = {
-  contact: 'ads_conversion_Contact_Us_1',
+  enquiry: `${GOOGLE_TAG_ID}/GN-yCJzE35gdEITlurJE`,
+  contactClick: `${GOOGLE_TAG_ID}/_4--CJ_E35gdEITlurJE`,
 } as const
 
 declare global {
@@ -20,19 +25,17 @@ declare global {
  * as a conversion.
  */
 export function trackEnquiryConversion() {
-  window.gtag?.('event', CONVERSIONS.contact, {})
+  window.gtag?.('event', 'conversion', { send_to: CONVERSIONS.enquiry, value: 1, currency: 'NZD' })
   window.fbq?.('track', 'Lead')
 }
 
 /**
  * Report a click on a WhatsApp, phone, email or Messenger link. This is an
- * intent signal, not a completed enquiry, so it is a plain event: it only
- * counts in Google Ads once a conversion action is created for
- * `contact_click`, and that action should be secondary so bidding still
- * optimises for real form enquiries.
+ * intent signal, not a completed enquiry, so its Google Ads action is
+ * secondary: reported, but bidding still optimises for real form enquiries.
  */
 export function trackContactClick(method: 'whatsapp' | 'phone' | 'email' | 'messenger') {
-  window.gtag?.('event', 'contact_click', { method })
+  window.gtag?.('event', 'conversion', { send_to: CONVERSIONS.contactClick, value: 1, currency: 'NZD', method })
   window.fbq?.('track', 'Contact', { method })
 }
 
