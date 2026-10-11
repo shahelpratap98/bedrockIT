@@ -150,7 +150,7 @@ writeFileSync(resolve('dist', 'sitemap.xml'), sitemap)
 
 writeFileSync(
   resolve('dist', 'robots.txt'),
-  `User-agent: *\nAllow: /\n\nSitemap: ${origin}${prefix}/sitemap.xml\n`,
+  `User-agent: *\nAllow: /\nDisallow: ${prefix}/portal\n\nSitemap: ${origin}${prefix}/sitemap.xml\n`,
 )
 console.log('  wrote sitemap.xml and robots.txt')
 

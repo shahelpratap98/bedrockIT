@@ -1,7 +1,10 @@
 import React from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import App from './App'
+import { captureAttribution } from './config/attribution'
 import './index.css'
+
+captureAttribution()
 
 const container = document.getElementById('root')!
 
