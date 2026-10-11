@@ -18,7 +18,9 @@ await db.exec(`
   grant execute on function auth.uid() to authenticated, anon, service_role;
   grant usage on schema public to authenticated, anon, service_role;
 `);
-await db.exec(readFileSync(fileURLToPath(new URL("../migrations/20261011000100_crm.sql", import.meta.url)), "utf8"));
+for (const f of ["20261011000100_crm.sql", "20261011000200_contact_email_optional.sql"]) {
+  await db.exec(readFileSync(fileURLToPath(new URL("../migrations/" + f, import.meta.url)), "utf8"));
+}
 await db.exec(`grant all on all tables in schema public to service_role; grant usage on schema app to service_role;
                grant execute on all functions in schema public to service_role;`);
 
@@ -109,6 +111,13 @@ ok(blocked, "members cannot forge system or stage entries");
 blocked = false;
 try { await db.transaction(async (tx) => { await tx.exec(`set local role anon`); await tx.query(`select * from public.leads`); }); } catch { blocked = true; }
 ok(blocked, "anonymous visitors have no access at all");
+
+console.log("\nphone-only contacts");
+await db.exec(`insert into public.contacts (name, phone, status) values ('Phone Only', '021 555 0000', 'active')`);
+ok((await q(`select count(*)::int n from public.contacts where email is null`))[0].n === 1, "a contact without an email is allowed");
+let badEmail = false;
+try { await db.exec(`insert into public.contacts (email) values ('Not An Email')`); } catch { badEmail = true; }
+ok(badEmail, "a malformed email is still rejected");
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

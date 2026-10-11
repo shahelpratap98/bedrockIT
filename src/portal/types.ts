@@ -47,7 +47,7 @@ export interface LeadRow {
   landing_page: string | null
   referrer: string | null
   created_at: string
-  contact_email: string
+  contact_email: string | null
   contact_name: string | null
   contact_phone: string | null
   contact_company: string | null
@@ -83,7 +83,7 @@ export interface Activity {
 
 export interface TriageRow {
   id: string
-  email: string
+  email: string | null
   name: string | null
   company: string | null
   first_seen_at: string

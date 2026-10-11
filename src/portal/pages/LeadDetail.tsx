@@ -110,10 +110,10 @@ export default function LeadDetail() {
       <Link to="/" className="text-sm text-stone-500 hover:text-stone-900">← Leads</Link>
       <div className="mt-3 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">{lead.contact_name || lead.contact_email}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{lead.contact_name || lead.contact_email || 'Unnamed contact'}</h1>
           <p className="mt-1 text-sm text-stone-600">
             {lead.contact_company && <>{lead.contact_company} · </>}
-            <a className="underline-offset-4 hover:underline" href={`mailto:${lead.contact_email}`}>{lead.contact_email}</a>
+            {lead.contact_email ? <a className="underline-offset-4 hover:underline" href={`mailto:${lead.contact_email}`}>{lead.contact_email}</a> : <span className="text-stone-400">no email on file</span>}
             {lead.contact_phone && <> · <a className="underline-offset-4 hover:underline" href={`tel:${lead.contact_phone.replace(/\s/g, '')}`}>{lead.contact_phone}</a></>}
           </p>
         </div>
