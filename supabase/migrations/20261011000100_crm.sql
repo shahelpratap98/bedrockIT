@@ -490,3 +490,9 @@ grant execute on function app.is_member() to authenticated;
 grant execute on function public.crm_make_lead(uuid, text, text, text) to authenticated;
 grant execute on function public.crm_add_lead(text, text, text, text, text, text, text, numeric) to authenticated;
 grant execute on function public.crm_report(date, date) to authenticated;
+
+-- The mailbox sync runs as service_role. Granted explicitly so it works with
+-- "Automatically expose new tables" switched off in the project settings.
+grant usage on schema public, app to service_role;
+grant select, insert, update, delete on all tables in schema public to service_role;
+grant execute on function public.crm_ingest(jsonb, text) to service_role;
