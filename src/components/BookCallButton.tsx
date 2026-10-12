@@ -6,6 +6,8 @@ interface BookCallButtonProps {
   large?: boolean
   label?: string
   className?: string
+  /** Outline style, for pages where another button is the main action. */
+  secondary?: boolean
 }
 
 /** Opens a pre-filled WhatsApp chat. Styling matches the original CTA exactly. */
@@ -13,7 +15,21 @@ export default function BookCallButton({
   large = false,
   label = 'Book a call',
   className = '',
+  secondary = false,
 }: BookCallButtonProps) {
+  if (secondary) {
+    return (
+      <a
+        href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`inline-flex items-center gap-2 rounded-full border border-primary/40 px-5 py-3 text-sm text-primary transition-colors hover:border-primary hover:bg-primary/10 ${className}`}
+      >
+        {label}
+      </a>
+    )
+  }
+
   return (
     <a
       href={WHATSAPP_URL}

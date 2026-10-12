@@ -23,6 +23,23 @@ export default function Navbar({ variant = 'overlay' }: NavbarProps) {
     <ul className="flex items-center gap-3 sm:gap-6 md:gap-12 lg:gap-14">
       {NAV_ITEMS.map((item) => {
         const isActive = pathname === item.to
+        // Contact is the way in to the enquiry form, so it reads as a button.
+        if (item.to === '/contact') {
+          return (
+            <li key={item.to}>
+              <Link
+                to={item.to}
+                className={`inline-flex min-h-[32px] items-center whitespace-nowrap rounded-full border px-3 text-[10px] transition-colors duration-200 sm:min-h-0 sm:py-1.5 sm:text-xs md:px-4 md:text-sm ${
+                  isActive
+                    ? 'border-primary bg-primary text-black'
+                    : 'border-primary/50 text-primary hover:bg-primary hover:text-black'
+                }`}
+              >
+                {item.label}
+              </Link>
+            </li>
+          )
+        }
         return (
           <li key={item.to}>
             <Link

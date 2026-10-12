@@ -7,23 +7,30 @@ import Faqs from '../components/Faqs'
 import JsonLd from '../components/JsonLd'
 import BookCallButton from '../components/BookCallButton'
 import SystemsShowcase from '../components/SystemsShowcase'
+import QuoteForm from '../components/QuoteForm'
+import StickyQuoteBar from '../components/StickyQuoteBar'
 import { SERVICES, type Service } from '../data/services'
 import { PROJECTS } from '../data/projects'
 
 const BASE = import.meta.env.BASE_URL
+const QUOTE_ID = 'quote'
 
 /**
- * The enquiry form, with this service preselected. The form is where the
- * Google Ads conversion fires; a WhatsApp chat on its own records nothing.
+ * Jumps to the quote form further down this page. The form is the main action
+ * because a sent form is the Google Ads conversion; a WhatsApp chat on its own
+ * records nothing.
  */
-function QuoteLink({ slug }: { slug: string }) {
+function QuoteLink() {
   return (
-    <Link
-      to={`/contact?service=${slug}`}
-      className="inline-flex items-center gap-2 rounded-full border border-primary/40 px-5 py-3 text-sm text-primary transition-colors hover:border-primary hover:bg-primary/10"
+    <a
+      href={`#${QUOTE_ID}`}
+      className="group inline-flex items-center gap-2 rounded-full bg-primary py-1.5 pl-5 pr-1.5 text-sm font-medium text-black transition-all duration-300 hover:gap-3"
     >
       Get a fixed quote
-    </Link>
+      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition-transform duration-300 group-hover:scale-110">
+        <ArrowRight className="h-4 w-4" style={{ color: '#E1E0CC' }} />
+      </span>
+    </a>
   )
 }
 
@@ -58,8 +65,8 @@ export default function ServicePage({ service }: { service: Service }) {
       */}
       <div className="-mt-10 flex flex-col items-center gap-6 pb-14">
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <BookCallButton />
-          <QuoteLink slug={service.slug} />
+          <QuoteLink />
+          <BookCallButton secondary label="Chat on WhatsApp" />
         </div>
         <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500">
           Last updated {service.lastUpdated}
@@ -89,6 +96,40 @@ export default function ServicePage({ service }: { service: Service }) {
                 </div>
               </Reveal>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/*
+        The quote form itself, on the page the ads land on, so nobody has to
+        go to /contact first. Not wrapped in Reveal: when the hero button or
+        the sticky bar jumps here it must already be visible.
+      */}
+      <section id={QUOTE_ID} className="scroll-mt-6 px-4 pb-20 sm:px-6 md:pb-24">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-3 lg:grid-cols-3 lg:gap-1">
+          <div className="rounded-2xl bg-[#212121] p-6 sm:p-8">
+            <h2 className="text-xl sm:text-2xl md:text-3xl" style={{ color: '#E1E0CC' }}>
+              Get a fixed quote
+            </h2>
+            <ul className="mt-6 flex flex-col gap-3">
+              {[
+                'We reply within one business day',
+                'A fixed price, agreed in writing before any work',
+                'No obligation to go ahead',
+              ].map((point) => (
+                <li key={point} className="flex items-start gap-2">
+                  <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                  <span className="text-xs leading-snug text-gray-400 sm:text-sm">{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-2xl bg-[#101010] p-6 sm:p-8 md:p-10 lg:col-span-2">
+            <QuoteForm
+              service={service.name}
+              submitLabel="Get my fixed quote"
+              messagePlaceholder="What you use today, what you want it to do, and roughly when you need it."
+            />
           </div>
         </div>
       </section>
@@ -135,8 +176,8 @@ export default function ServicePage({ service }: { service: Service }) {
             ))}
           </ul>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <BookCallButton label="Talk it through" />
-            <QuoteLink slug={service.slug} />
+            <QuoteLink />
+            <BookCallButton secondary label="Talk it through" />
           </div>
         </div>
       </section>
@@ -225,6 +266,8 @@ export default function ServicePage({ service }: { service: Service }) {
           </div>
         </div>
       </section>
+
+      <StickyQuoteBar targetId={QUOTE_ID} />
     </div>
   )
 }
